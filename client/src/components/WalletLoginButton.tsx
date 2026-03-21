@@ -45,15 +45,10 @@ export const WalletLoginButton = ({
           const result = await verifyWallet(address);
           globalVerifiedAddress = address;
 
-          if (result.success) {
-            if (result.needsOnboarding) {
-              // Redirect to onboarding if they are a new user
-              toast("Wallet connected. Let's finish your profile!");
-              router.push("/onboarding");
-            } else if (result.authenticated && redirectOnAuth) {
-              // Redirect to dashboard if returning user
-              toast.success("Welcome back!");
-              router.push("/dashboard");
+          if (result.success && result.authenticated) {
+            toast.success("Connected successfully!");
+            if (redirectOnAuth) {
+              router.push("/dashboard/markets");
             }
           } else {
             toast.error(result.error || "Verification failed");
@@ -121,7 +116,7 @@ export const WalletLoginButton = ({
                   if (!connected) {
                     return (
                       <Button onClick={openConnectModal} type="button" className={className}>
-                        {children}
+                        {children || "Connect Wallet"}
                       </Button>
                     );
                   }
@@ -130,6 +125,14 @@ export const WalletLoginButton = ({
                     return (
                       <Button onClick={openChainModal} type="button" className={className}>
                         Wrong network
+                      </Button>
+                    );
+                  }
+
+                  if (redirectOnAuth) {
+                    return (
+                      <Button onClick={() => router.push("/dashboard/markets")} type="button" className={className}>
+                        Go to Dashboard
                       </Button>
                     );
                   }

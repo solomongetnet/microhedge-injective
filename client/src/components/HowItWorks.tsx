@@ -39,7 +39,7 @@ export default function HowItWorks() {
   return (
     <section id="howitworks" className="flex flex-col w-full bg-gray-50 dark:bg-[#0D0D0D] py-16 px-6 md:py-[100px] md:px-[120px] gap-12 md:gap-[64px] transition-colors duration-300">
       <SectionHeader
-        label="[02] // HOW IT WORKS"
+        label="[03] // HOW IT WORKS"
         title={"FOUR SIMPLE STEPS.\nPERMANENT PROTECTION."}
       />
 

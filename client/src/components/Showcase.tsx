@@ -55,7 +55,7 @@ export default function Showcase() {
       {/* Header */}
       <div className="flex items-end justify-between px-6 md:px-[120px]">
         <SectionHeader
-          label="[04] // SHOWCASE"
+          label="[05] // SHOWCASE"
           title={"PLATFORM IN\nACTION."}
           titleWidth="w-full max-w-[600px]"
         />

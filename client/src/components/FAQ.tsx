@@ -23,7 +23,7 @@ export default function FAQ() {
     <section id="faq" className="flex flex-col w-full bg-white dark:bg-[#060606] py-16 px-6 md:py-[100px] md:px-[120px] transition-colors duration-300">
       <div className="w-full max-w-[480px]">
         <SectionHeader
-          label="[05] // FAQ"
+          label="[06] // FAQ"
           title={"QUESTIONS\nANSWERED."}
           subtitle="EVERYTHING YOU NEED TO KNOW ABOUT MICROHEDGER AFRICA."
           titleWidth="w-full"

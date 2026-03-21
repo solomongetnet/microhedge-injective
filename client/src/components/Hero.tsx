@@ -15,8 +15,8 @@ export default function Hero() {
       {/* Badge */}
       <div className="flex items-center justify-center gap-[8px] h-[32px] px-[12px] md:px-[16px] bg-green-100 dark:bg-[#1A1A1A] border-2 border-[#00DC82] dark:border-[#FFD600]">
         <div className="w-[8px] h-[8px] bg-[#00DC82] dark:bg-[#FFD600] shrink-0" />
-        <span className="font-ibm-mono text-[9px] md:text-[11px] font-bold text-[#00DC82] dark:text-[#FFD600] tracking-[1px] md:tracking-[2px] whitespace-nowrap">
-          PROTECTING AFRICAN FARMERS // BLOCKCHAIN POWERED
+        <span className="font-ibm-mono text-[9px] md:text-[11px] font-bold text-[#00DC82] dark:text-[#FFD600] tracking-[1px] md:tracking-[2px] whitespace-nowrap uppercase">
+          Built on Injective // Real-World Asset Hedging
         </span>
       </div>
 
@@ -24,21 +24,21 @@ export default function Hero() {
 
       {/* Headline */}
       <h1 className="font-grotesk text-[clamp(32px,10vw,96px)] font-bold text-black dark:text-[#F5F5F0] tracking-[-1px] leading-none text-center w-full max-w-[1100px]">
-        <GlitchText text="PROTECT YOUR FARM" speed={45} delay={100} />
+        <GlitchText text="DEFI PROTECTION" speed={45} delay={100} />
         <br />
-        <GlitchText text="INCOME." speed={45} delay={400} />
+        <GlitchText text="FOR FARMERS." speed={45} delay={400} />
       </h1>
       <h1 className="font-grotesk text-[clamp(32px,10vw,96px)] font-bold text-[#00DC82] dark:text-[#FFD600] tracking-[-1px] leading-none text-center w-full max-w-[1100px]">
-        <GlitchText text="HEDGED & SECURE." speed={45} delay={700} />
+        <GlitchText text="POWERED BY INJECTIVE." speed={45} delay={700} />
       </h1>
 
       <div className="h-8 md:h-[32px]" />
 
       {/* Subheading */}
       <p className="font-ibm-mono text-[13px] md:text-[15px] text-gray-600 dark:text-[#888888] tracking-[1px] leading-[1.6] text-center w-full max-w-[800px]">
-        AI-POWERED MICRO-HEDGING FOR SMALLHOLDER FARMERS IN AFRICA.
+        REAL-WORLD COMMODITY HEDGING POWERED BY INJECTIVE'S DEFI INFRASTRUCTURE.
         <br />
-        STABLE INCOME // BLOCKCHAIN SECURE // TRANSPARENT PRICING.
+        STABLE INCOME // FAST ON-CHAIN EXECUTION // TRANSPARENT ORACLES.
       </p>
 
       <div className="h-10 md:h-[48px]" />
@@ -46,28 +46,28 @@ export default function Hero() {
       {/* CTAs */}
       <div className="flex flex-col sm:flex-row items-center gap-4 md:gap-[16px] w-full sm:w-auto">
         <WalletLoginButton redirectOnAuth className="w-full sm:w-[220px] h-[56px] font-grotesk text-[12px] font-bold tracking-[2px]">
-          GET STARTED NOW
+          CONNECT WALLET
         </WalletLoginButton>
         <Button variant="outline" size="lg" className="w-full sm:w-[200px] h-[56px] font-ibm-mono text-[12px] tracking-[2px]">
-          LEARN MORE →
+          EXPLORE MARKETS →
         </Button>
       </div>
 
       <div className="h-6 md:h-[24px]" />
 
-      <p className="font-ibm-mono text-[11px] text-gray-500 dark:text-[#555555] tracking-[2px] text-center">
-        TRUSTED BY FARMERS ACROSS AFRICA // INEVM TESTNET // METAMASK READY
+      <p className="font-ibm-mono text-[11px] text-gray-500 dark:text-[#555555] tracking-[2px] text-center uppercase">
+        Built on Injective // DeFi Infrastructure // Next-Gen Hedging
       </p>
 
       <div className="h-12 md:h-[64px]" />
 
       {/* Animated Design Interface */}
-      <div
+      {/* <div
         className="w-full max-w-[1100px] bg-[#0F0F0F] overflow-hidden"
         style={{ border: "2px solid #2D2D2D" }}
       >
         <DesignInterfaceSVG mounted={mounted} />
-      </div>
+      </div> */}
 
       {/* Collab cursors on the full hero */}
       <CollabCursors />

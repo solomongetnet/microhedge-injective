@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import PixelDivider from "@/components/PixelDivider";
 import Features from "@/components/Features";
+import WhyInjective from "@/components/WhyInjective";
 import HowItWorks from "@/components/HowItWorks";
 import TechStack from "@/components/TechStack";
 import Showcase from "@/components/Showcase";
@@ -19,6 +20,7 @@ export default function Home() {
         <Hero />
         <PixelDivider />
         <Features />
+        <WhyInjective />
         <HowItWorks />
         <TechStack />
         <Showcase />

@@ -1,14 +1,14 @@
 <!-- price oracle contract address -->
-contract address = 0x9B889026FF03b18C4fe1958a668a4A83Cafd3E92
-explorer = https://moonbase.moonscan.io/token/0x9B889026FF03b18C4fe1958a668a4A83Cafd3E92#code
+contract address = 0x935a001F8Eb6b169CF2941512eC7AD9284bbEDCf
+explorer = 0x935a001F8Eb6b169CF2941512eC7AD9284bbEDCf
 
 <!-- Hedge contract address -->
-contract address = 0x986E86c9E53733eAd8B254F14a8C9cc3E88D7eDf
-explorer = https://moonbase.moonscan.io/token/0x986E86c9E53733eAd8B254F14a8C9cc3E88D7eDf#code
+contract address = 0x1e4A9e7300601C9D5bF4A471C943DfEE8C8D8120
+explorer = 0x1e4A9e7300601C9D5bF4A471C943DfEE8C8D8120
 
 <!-- Mock Usdt contract address -->
-contract address = 0xC3DC2Fa056EAc162C42960d458a0c37C6D06122e
-explorer = https://moonbase.moonscan.io/token/0xC3DC2Fa056EAc162C42960d458a0c37C6D06122e
+contract address = 0x4634E939F6E6782F0Ca4b74F497f5A79C87Fe117
+explorer = 0x4634E939F6E6782F0Ca4b74F497f5A79C87Fe117
 
 
 

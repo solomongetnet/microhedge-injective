@@ -15,7 +15,7 @@ export default function TechStack() {
   return (
     <section id="techstack" className="flex flex-col w-full bg-white dark:bg-[#0A0A0A] py-16 px-6 md:py-[100px] md:px-[120px] gap-12 md:gap-[64px] transition-colors duration-300">
       <SectionHeader
-        label="[03] // TECH STACK"
+        label="[04] // TECH STACK"
         title={"BUILT WITH PROVEN\nTECHNOLOGY."}
         subtitle="ENTERPRISE-GRADE INFRASTRUCTURE // OPEN SOURCE // DECENTRALIZED FIRST."
       />

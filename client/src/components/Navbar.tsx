@@ -6,7 +6,10 @@ import { Button } from "@/components/ui/button";
 import { ModeToggle } from "./ui/mode-toggle";
 import { WalletLoginButton } from "@/components/WalletLoginButton";
 
+import Link from "next/link";
+
 const links = [
+  { label: "WHY INJECTIVE", section: "why-injective" },
   { label: "FEATURES", section: "features" },
   { label: "HOW IT WORKS", section: "howitworks" },
   { label: "TECH STACK", section: "techstack" },
@@ -15,7 +18,11 @@ const links = [
 
 function scrollTo(id: string) {
   const el = document.getElementById(id);
-  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  if (el) {
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+  } else {
+    window.location.href = `/#${id}`;
+  }
 }
 
 export default function Navbar() {
@@ -81,12 +88,28 @@ export default function Navbar() {
 
         {/* ── Desktop nav ── */}
         <nav className="hidden md:flex items-center gap-[36px]">
-          {links.map(({ label, section }) => {
+          {links.map(({ label, section, href }) => {
             const isActive = active === section;
+
+            if (href) {
+              return (
+                <Link
+                  key={label}
+                  href={href}
+                  className="font-ibm-mono text-[10px] tracking-[1.5px] transition-colors duration-150"
+                  style={{
+                    color: theme === "dark" ? "#555" : "#999",
+                  }}
+                >
+                  {label}
+                </Link>
+              );
+            }
+
             return (
               <button
                 key={label}
-                onClick={() => scrollTo(section)}
+                onClick={() => scrollTo(section!)}
                 className="relative font-ibm-mono text-[10px] tracking-[1.5px] transition-colors duration-150 bg-transparent border-none cursor-pointer"
                 style={{
                   color: isActive
@@ -98,135 +121,85 @@ export default function Navbar() {
                       : "#999",
                 }}
                 onMouseEnter={(e) => {
-                  if (!isActive)
-                    (e.currentTarget as HTMLButtonElement).style.color =
-                      theme === "dark" ? "#F5F5F0" : "#000";
+                  e.currentTarget.style.color = theme === "dark" ? "#FFD600" : "#00DC82";
                 }}
                 onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLButtonElement).style.color = isActive
-                    ? theme === "dark"
-                      ? "#FFD600"
-                      : "#00DC82"
-                    : theme === "dark"
-                      ? "#555"
-                      : "#999";
+                  if (!isActive) {
+                    e.currentTarget.style.color = theme === "dark" ? "#555" : "#999";
+                  }
                 }}
               >
                 {label}
-                <span
-                  className="absolute left-0 -bottom-[3px] h-[1.5px] transition-all duration-300"
-                  style={{
-                    backgroundColor: theme === "dark" ? "#FFD600" : "#00DC82",
-                    width: isActive ? "100%" : "0%",
-                  }}
-                />
               </button>
             );
           })}
+          <div className="flex items-center gap-4 border-l pl-8 border-gray-100 dark:border-white/10">
+            <ModeToggle />
+            <WalletLoginButton className="h-[42px] px-6 font-grotesk text-[10px] font-bold tracking-[1.5px] bg-[#00DC82] dark:bg-[#FFD600] text-black border-none" />
+          </div>
         </nav>
 
-        {/* ── Desktop CTA ── */}
-        <div className="hidden md:flex items-center gap-[14px]">
-          <ModeToggle />
-          <WalletLoginButton redirectOnAuth className="font-grotesk text-[11px] font-bold tracking-[1.5px] px-[18px] py-[9px]">
-            DEMO
-          </WalletLoginButton>
-        </div>
-
-        {/* ── Mobile burger ── */}
+        {/* ── Mobile toggle ── */}
         <button
-          className="md:hidden flex flex-col gap-[5px] p-2 -mr-2"
-          onClick={() => setMenuOpen((v) => !v)}
-          aria-label="Toggle menu"
+          className="md:hidden flex flex-col gap-[6px] p-2 bg-transparent border-none cursor-pointer"
+          onClick={() => setMenuOpen(!menuOpen)}
         >
-          <span
-            className="block w-[20px] h-[1.5px] bg-[#F5F5F0] transition-transform duration-200 origin-center"
+          <div
+            className="w-[20px] h-[1px] transition-all duration-300"
             style={{
-              transform: menuOpen ? "translateY(6.5px) rotate(45deg)" : "none",
+              backgroundColor: theme === "dark" ? "#FFF" : "#000",
+              transform: menuOpen ? "rotate(45deg) translateY(5px)" : "none",
             }}
           />
-          <span
-            className="block w-[20px] h-[1.5px] bg-[#F5F5F0] transition-opacity duration-200"
-            style={{ opacity: menuOpen ? 0 : 1 }}
-          />
-          <span
-            className="block w-[20px] h-[1.5px] bg-[#F5F5F0] transition-transform duration-200 origin-center"
+          <div
+            className="w-[20px] h-[1px] transition-all duration-300"
             style={{
-              transform: menuOpen
-                ? "translateY(-6.5px) rotate(-45deg)"
-                : "none",
+              backgroundColor: theme === "dark" ? "#FFF" : "#000",
+              opacity: menuOpen ? 0 : 1,
+            }}
+          />
+          <div
+            className="w-[20px] h-[1px] transition-all duration-300"
+            style={{
+              backgroundColor: theme === "dark" ? "#FFF" : "#000",
+              transform: menuOpen ? "rotate(-45deg) translateY(-5px)" : "none",
             }}
           />
         </button>
       </div>
 
-      {/* ── Mobile drawer ── */}
-      <div
-        className="md:hidden overflow-hidden transition-all duration-300"
-        style={{
-          maxHeight: menuOpen ? "400px" : "0px",
-          background:
-            theme === "dark" ? "rgba(10,10,10,0.97)" : "rgba(255,255,255,0.97)",
-          backdropFilter: "blur(14px)",
-          borderBottom: menuOpen
-            ? theme === "dark"
-              ? "1px solid #1E1E1E"
-              : "1px solid #E5E5E5"
-            : "none",
-        }}
-      >
-        <nav className="flex flex-col px-6 py-5 gap-0">
-          {links.map(({ label, section }) => {
-            const isActive = active === section;
-            return (
+      {/* ── Mobile menu ── */}
+      {menuOpen && (
+        <div className="md:hidden fixed top-[60px] left-0 right-0 h-[calc(100vh-60px)] bg-white dark:bg-[#0A0A0A] z-40 p-8 flex flex-col gap-8">
+          {links.map(({ label, section, href }) => (
+            href ? (
+              <Link
+                key={label}
+                href={href}
+                className="font-grotesk text-[18px] font-bold text-black dark:text-white tracking-[2px]"
+                onClick={() => setMenuOpen(false)}
+              >
+                {label}
+              </Link>
+            ) : (
               <button
                 key={label}
                 onClick={() => {
-                  scrollTo(section);
+                  scrollTo(section!);
                   setMenuOpen(false);
                 }}
-                className="flex items-center gap-2 w-full font-ibm-mono text-[12px] tracking-[2px] py-[14px] border-b transition-colors bg-transparent border-x-0 border-t-0 cursor-pointer"
-                style={{
-                  color: isActive
-                    ? theme === "dark"
-                      ? "#FFD600"
-                      : "#00DC82"
-                    : theme === "dark"
-                      ? "#666"
-                      : "#999",
-                  borderColor: theme === "dark" ? "#141414" : "#E5E5E5",
-                }}
+                className="font-grotesk text-[18px] font-bold text-black dark:text-white tracking-[2px] bg-transparent border-none text-left"
               >
-                <span
-                  className="w-[4px] h-[4px] rounded-full shrink-0 transition-colors"
-                  style={{
-                    background: isActive
-                      ? theme === "dark"
-                        ? "#FFD600"
-                        : "#00DC82"
-                      : theme === "dark"
-                        ? "#2D2D2D"
-                        : "#D0D0D0",
-                  }}
-                />
                 {label}
               </button>
-            );
-          })}
-          <div className="flex flex-col gap-[10px] pt-5 w-full">
-            <Button
-              variant="outline"
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="font-ibm-mono text-[12px] tracking-[1.5px] w-full"
-            >
-              {theme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode"}
-            </Button>
-            <WalletLoginButton redirectOnAuth className="font-grotesk text-[11px] font-bold tracking-[1.5px] w-full">
-              TRY DEMO
-            </WalletLoginButton>
+            )
+          ))}
+          <div className="flex items-center gap-4 pt-4 border-t border-gray-100 dark:border-white/10">
+            <ModeToggle />
+            <WalletLoginButton className="flex-1 h-[56px] font-grotesk text-[11px] font-bold tracking-[2px] bg-[#00DC82] dark:bg-[#FFD600] text-black border-none" />
           </div>
-        </nav>
-      </div>
+        </div>
+      )}
     </header>
   );
 }

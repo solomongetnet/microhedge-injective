@@ -1,10 +1,8 @@
-import hardhatToolboxMochaEthersPlugin from "@nomicfoundation/hardhat-toolbox-mocha-ethers";
-import "@nomicfoundation/hardhat-ethers";
+import "@nomicfoundation/hardhat-toolbox"; // includes ethers, waffle, and mocha
 import { defineConfig } from "hardhat/config";
 import "dotenv/config";
 
 export default defineConfig({
-  plugins: [hardhatToolboxMochaEthersPlugin],
   solidity: {
     profiles: {
       default: {
@@ -22,11 +20,10 @@ export default defineConfig({
     },
   },
   networks: {
-    creditcoinTestnet: {
-      type: "http",
-      url: process.env.CREDITCOIN_RPC_URL || "https://rpc.cc3-testnet.creditcoin.network",
-      chainId: 102031,
-      accounts: [process.env.TEST_PRIVATE_KEY || "0x0000000000000000000000000000000000000000000000000000000000000000"],
+    injectiveTestnet: {
+      url: process.env.INJECTIVE_API_KEY || "https://sentry.tm.injective.network:443",
+      chainId: 888, // Injective testnet/mainnet: double-check if this is mainnet or testnet
+      accounts: [process.env.INJECTIVE_PRIVATE_KEY || "0x0000000000000000000000000000000000000000000000000000000000000000"],
     },
   },
 });
