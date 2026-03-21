@@ -64,9 +64,9 @@ Here are the main smart contracts deployed on **Injective Testnet**:
 
 | Contract | Address | Explorer |
 |----------|---------|---------|
-| Price Oracle | `0x935a001F8Eb6b169CF2941512eC7AD9284bbEDCf` | [View on Blockscout](https://testnet.blockscout.injective.network/token/0x935a001F8Eb6b169CF2941512eC7AD9284bbEDCf) |
-| Hedge Contract | `0x1e4A9e7300601C9D5bF4A471C943DfEE8C8D8120` | [View on Blockscout](https://testnet.blockscout.injective.network/token/0x1e4A9e7300601C9D5bF4A471C943DfEE8C8D8120) |
-| Mock USDT | `0x4634E939F6E6782F0Ca4b74F497f5A79C87Fe117` | [View on Blockscout](https://testnet.blockscout.injective.network/token/0x4634E939F6E6782F0Ca4b74F497f5A79C87Fe117) |
+| Price Oracle | `0x935a001F8Eb6b169CF2941512eC7AD9284bbEDCf` | [View on Blockscout](https://testnet.blockscout.injective.network/address/0x935a001F8Eb6b169CF2941512eC7AD9284bbEDCf) |
+| Hedge Contract | `0x1e4A9e7300601C9D5bF4A471C943DfEE8C8D8120` | [View on Blockscout](https://testnet.blockscout.injective.network/address/0x1e4A9e7300601C9D5bF4A471C943DfEE8C8D8120) |
+| Mock USDT | `0x4634E939F6E6782F0Ca4b74F497f5A79C87Fe117` | [View on Blockscout](https://testnet.blockscout.injective.network/address/0x4634E939F6E6782F0Ca4b74F497f5A79C87Fe117) |
 
 ---
 
