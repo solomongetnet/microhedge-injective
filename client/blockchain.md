@@ -11,6 +11,9 @@ contract address = 0x4634E939F6E6782F0Ca4b74F497f5A79C87Fe117
 explorer = 0x4634E939F6E6782F0Ca4b74F497f5A79C87Fe117
 
 
+Hedge Contract – https://testnet.blockscout.injective.network/tx/0x63e28822922d250847c7908721e5dab2ec16fa8a0b8de453efc4249abcd3692d
+Price Oracle – https://testnet.blockscout.injective.network/tx/0x8b9e0941e97b19d1ea04a5bf0f9c229b2a3ca6eb717c7dd1913b8f8ae61e0f5a
+Mock USDT – https://testnet.blockscout.injective.network/tx/0x259fe6054ceccb2c945c26aa52924a77fdbe658c56ede4c0640278f20c8c2d6b
 
 
 <!-- metamask wallet addresses -->

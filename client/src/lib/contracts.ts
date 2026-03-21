@@ -3,12 +3,12 @@ import priceOracleAbi from "@/../contracts/price-oracle.abi.json";
 import mockUsdtAbi from "@/../contracts/mock-usdt.api.json";
 
 export const FUSDT_CONTRACT_ADDRESS =
-  "0xC3DC2Fa056EAc162C42960d458a0c37C6D06122e";
+  "0x4634E939F6E6782F0Ca4b74F497f5A79C87Fe117";
 
 export const HEDGE_CONTRACT_ADDRESS =
-  "0x986E86c9E53733eAd8B254F14a8C9cc3E88D7eDf";
+  "0x1e4A9e7300601C9D5bF4A471C943DfEE8C8D8120";
 
 export const PRICE_ORACLE_ADDRESS =
-  "0x9B889026FF03b18C4fe1958a668a4A83Cafd3E92";
+  "0x935a001F8Eb6b169CF2941512eC7AD9284bbEDCf";
 
 export { hedgeAbi, priceOracleAbi, mockUsdtAbi };
