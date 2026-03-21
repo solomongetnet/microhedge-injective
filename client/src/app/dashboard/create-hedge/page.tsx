@@ -100,7 +100,7 @@ function CreateHedgeForm() {
         description: `Your ${selectedSymbol} hedge is now live on-chain.`,
         action: {
           label: "View Tx",
-          onClick: () => window.open(`https://moonbase.moonscan.io/tx/${createTxHash}`, '_blank')
+          onClick: () => window.open(`https://testnet.blockscout.injective.network/${createTxHash}`, '_blank')
         }
       });
     }
@@ -198,7 +198,7 @@ function CreateHedgeForm() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Left Column: Form */}
         <div className="lg:col-span-8 bg-white rounded-[32px] p-8 shadow-sm border border-gray-100 flex flex-col gap-8">
-          
+
           <div className="space-y-6">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-full bg-[#fce4ec] flex items-center justify-center text-[#d80073]">
@@ -206,18 +206,17 @@ function CreateHedgeForm() {
               </div>
               <h2 className="text-xl font-bold text-gray-900">1. Select Commodity</h2>
             </div>
-            
+
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {COMMODITIES.map((c) => (
                 <button
                   key={c.symbol}
                   onClick={() => setSelectedSymbol(c.symbol)}
                   disabled={isLoading}
-                  className={`p-5 rounded-[24px] flex flex-col items-center gap-3 transition-all duration-300 border-2 ${
-                    selectedSymbol === c.symbol
+                  className={`p-5 rounded-[24px] flex flex-col items-center gap-3 transition-all duration-300 border-2 ${selectedSymbol === c.symbol
                       ? "bg-[#fce4ec]/30 border-[#d80073] shadow-md scale-[1.02]"
                       : "bg-gray-50 border-transparent hover:bg-gray-100"
-                  }`}
+                    }`}
                 >
                   <div className="w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center">
                     <CommodityIcon symbol={c.symbol} />
@@ -264,11 +263,10 @@ function CreateHedgeForm() {
                     key={opt.id}
                     onClick={() => setExpireOption(opt.id)}
                     disabled={isLoading}
-                    className={`flex-1 py-4 rounded-2xl font-bold transition-all border-2 ${
-                      expireOption === opt.id
+                    className={`flex-1 py-4 rounded-2xl font-bold transition-all border-2 ${expireOption === opt.id
                         ? "bg-[#d80073] text-white border-[#d80073] shadow-lg shadow-[#d80073]/20"
                         : "bg-gray-50 text-gray-500 border-transparent hover:bg-gray-100"
-                    }`}
+                      }`}
                   >
                     {opt.label}
                   </button>
@@ -288,11 +286,10 @@ function CreateHedgeForm() {
             <button
               onClick={handleCreateHedge}
               disabled={isLoading}
-              className={`w-full py-6 rounded-[24px] font-black text-xl flex justify-center items-center gap-3 transition-all active:scale-[0.98] ${
-                phase === "done" 
-                  ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/20" 
+              className={`w-full py-6 rounded-[24px] font-black text-xl flex justify-center items-center gap-3 transition-all active:scale-[0.98] ${phase === "done"
+                  ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/20"
                   : "bg-[#d80073] text-white shadow-xl shadow-[#d80073]/20 hover:bg-[#c20067]"
-              }`}
+                }`}
             >
               {isLoading ? (
                 <Loader2 className="animate-spin w-6 h-6" />
@@ -320,13 +317,13 @@ function CreateHedgeForm() {
             <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform duration-500">
               <Brain size={120} />
             </div>
-            
+
             <div className="relative z-10 space-y-6">
               <div className="flex items-center gap-2 px-3 py-1 bg-white/20 rounded-full w-fit backdrop-blur-sm border border-white/20">
                 <Sparkles size={14} className="text-amber-300" />
                 <span className="text-[10px] font-black uppercase tracking-widest">AI Intelligence</span>
               </div>
-              
+
               <div className="space-y-2">
                 <h3 className="text-2xl font-black tracking-tight">Strategy Suggestion</h3>
                 <p className="text-indigo-100 text-sm font-medium leading-relaxed">
@@ -393,7 +390,7 @@ function CreateHedgeForm() {
 // ─── Main Page with Suspense ──────────────────────────────────────
 export default function CreateHedgePage() {
   return (
-    <Suspense 
+    <Suspense
       fallback={
         <div className="max-w-5xl mx-auto py-20 flex flex-col items-center justify-center gap-4">
           <Loader2 className="w-10 h-10 text-[#d80073] animate-spin" />

@@ -88,23 +88,9 @@ export default function Navbar() {
 
         {/* ── Desktop nav ── */}
         <nav className="hidden md:flex items-center gap-[36px]">
-          {links.map(({ label, section, href }) => {
+          {links.map(({ label, section, }) => {
             const isActive = active === section;
 
-            if (href) {
-              return (
-                <Link
-                  key={label}
-                  href={href}
-                  className="font-ibm-mono text-[10px] tracking-[1.5px] transition-colors duration-150"
-                  style={{
-                    color: theme === "dark" ? "#555" : "#999",
-                  }}
-                >
-                  {label}
-                </Link>
-              );
-            }
 
             return (
               <button
@@ -171,29 +157,20 @@ export default function Navbar() {
       {/* ── Mobile menu ── */}
       {menuOpen && (
         <div className="md:hidden fixed top-[60px] left-0 right-0 h-[calc(100vh-60px)] bg-white dark:bg-[#0A0A0A] z-40 p-8 flex flex-col gap-8">
-          {links.map(({ label, section, href }) => (
-            href ? (
-              <Link
-                key={label}
-                href={href}
-                className="font-grotesk text-[18px] font-bold text-black dark:text-white tracking-[2px]"
-                onClick={() => setMenuOpen(false)}
-              >
-                {label}
-              </Link>
-            ) : (
-              <button
-                key={label}
-                onClick={() => {
-                  scrollTo(section!);
-                  setMenuOpen(false);
-                }}
-                className="font-grotesk text-[18px] font-bold text-black dark:text-white tracking-[2px] bg-transparent border-none text-left"
-              >
-                {label}
-              </button>
-            )
-          ))}
+          {links.map(({ label, section, }) => (
+
+            <button
+              key={label}
+              onClick={() => {
+                scrollTo(section!);
+                setMenuOpen(false);
+              }}
+              className="font-grotesk text-[18px] font-bold text-black dark:text-white tracking-[2px] bg-transparent border-none text-left"
+            >
+              {label}
+            </button>
+          )
+          )}
           <div className="flex items-center gap-4 pt-4 border-t border-gray-100 dark:border-white/10">
             <ModeToggle />
             <WalletLoginButton className="flex-1 h-[56px] font-grotesk text-[11px] font-bold tracking-[2px] bg-[#00DC82] dark:bg-[#FFD600] text-black border-none" />

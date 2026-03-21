@@ -220,7 +220,7 @@ function HedgeCard({ hedge, onSettle }: { hedge: OnChainHedge, onSettle: (id: bi
         )}
 
         <a 
-          href={`https://moonbase.moonscan.io/address/${HEDGE_CONTRACT_ADDRESS}`}
+          href={`https://testnet.blockscout.injective.network/address/${HEDGE_CONTRACT_ADDRESS}`}
           target="_blank"
           rel="noopener noreferrer"
           className="w-full py-2 flex items-center justify-center gap-1.5 text-gray-400 hover:text-[#d80073] transition-colors text-[10px] font-bold uppercase tracking-widest"

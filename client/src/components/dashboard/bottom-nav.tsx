@@ -20,12 +20,9 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { path: "/dashboard/markets", label: "Markets", icon: TrendingUp },
   { path: "/dashboard/create-hedge", label: "Create", icon: Plus },
   { path: "/dashboard/my-hedges", label: "Hedges", icon: Shield },
-  { path: "/dashboard/transactions", label: "Trades", icon: Wallet },
-  { path: "/dashboard/analytics", label: "Analytics", icon: BarChart3 },
   { path: "/dashboard/settings", label: "Settings", icon: Settings },
 ];
 
