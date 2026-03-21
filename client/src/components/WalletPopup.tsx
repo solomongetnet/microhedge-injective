@@ -32,7 +32,7 @@ export function WalletPopup({
     isError,
   } = useReadContract({
     address:
-      "0xC3DC2Fa056EAc162C42960d458a0c37C6D06122e" || FUSDT_CONTRACT_ADDRESS,
+      FUSDT_CONTRACT_ADDRESS as any,
     abi: MockUSDTAbi,
     functionName: "balanceOf",
     args: address ? [address] : undefined,
