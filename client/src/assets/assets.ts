@@ -1,0 +1,30 @@
+export const BACKGROUND_IMAGES = [
+  "https://images.pexels.com/photos/1563356/pexels-photo-1563356.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+  "https://codetheweb.blog/assets/img/posts/css-advanced-background-images/cover.jpg",
+  "https://4kwallpapers.com/images/wallpapers/dark-background-abstract-background-network-3d-background-3840x2160-8324.png",
+  "https://img.freepik.com/free-photo/illustration-anime-city_23-2151779669.jpg?semt=ais_hybrid&w=740&q=80",
+];
+
+export const ANIMATED_GIFS = [
+  "https://wallpapers-clan.com/wp-content/uploads/2024/08/man-dark-city-in-the-rain-gif-desktop-wallpaper-preview.gif",
+  "https://images.squarespace-cdn.com/content/v1/5d7b921aa20ea468a889fb20/1568380647526-YX9J52FU8INU1YFJS65P/njPhhkca.gif",
+  "https://i.pinimg.com/originals/b2/2a/a2/b22aa22b2f3f55b6468361158d52e2e7.gif",
+  "https://i.pinimg.com/originals/c1/fc/9d/c1fc9d7f6ae08d56f2b84e81799790a5.gif",
+  "https://i.pinimg.com/originals/b1/9b/93/b19b938d498e6a6b76f12cf7116820e6.gif",
+  "https://i.pinimg.com/originals/74/fa/be/74fabe0ac2588f7f052170708b5136b8.gif",
+  "https://78.media.tumblr.com/60e59024ef9bf9991179ce800fc0306d/tumblr_n6xrgfzoJF1tzixowo1_500.gif",
+  "https://i.imgur.com/GpHVfh7.gif",
+  "https://i.pinimg.com/originals/37/31/a7/3731a789f910936cd53918bd4c10a830.gif",
+  "https://cdna.artstation.com/p/assets/images/images/073/435/722/original/nathan-preview-1.gif?1709655047",
+  "https://i.pinimg.com/originals/64/96/7e/64967e6e29c639cab4ddd876d9a93a4f.gif",
+  "https://i.pinimg.com/originals/82/8b/63/828b634cde4cdcded7d029de673862c1.gif",
+  "https://giffiles.alphacoders.com/222/222803.gif",
+  "https://i.pinimg.com/originals/99/34/3c/99343c8804e5e17e3d81870200a4e521.gif",
+  "https://giffiles.alphacoders.com/220/220128.gif",
+  "https://i.makeagif.com/media/8-15-2015/PJ9atw.gif",
+  "https://i.pinimg.com/originals/aa/f4/6e/aaf46e2542271393b6fdc719f40857ed.gif",
+  "https://i.pinimg.com/originals/48/7e/4d/487e4d918c3fb41243694d2fa12622cf.gif",
+  "https://64.media.tumblr.com/22c1703df70e495315bfebe6f40b9269/7b35b1c700ff8d5d-c5/s1280x1920/549acf29115f58c0cf2ce1f98606ac4e608abd55.gifv",
+  "https://images.steamusercontent.com/ugc/2444972799632079248/1E7C0004A4E5A24855129F74FC618846F26E76F5/?imw=637&imh=358&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=true",
+  "https://cdnb.artstation.com/p/assets/images/images/053/358/841/original/jake-comingheremoreoftenlately.gif?1662021666",
+];

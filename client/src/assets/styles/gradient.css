@@ -1,0 +1,302 @@
+/* Premium Gradient Variables - Reusable for any CSS property */
+:root {
+  --gradient-royal: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-sunset: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --gradient-ocean: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --gradient-gold: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+  --gradient-emerald: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  --gradient-cosmic: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  --gradient-midnight: linear-gradient(135deg, #2c3e50 0%, #4a6741 100%);
+  --gradient-aurora: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  --gradient-fire: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+  --gradient-neon: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  --gradient-purple-dream: linear-gradient(135deg, #c471f5 0%, #fa71cd 100%);
+  --gradient-cyber: linear-gradient(135deg, #00c9ff 0%, #92fe9d 100%);
+  --gradient-luxury: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%);
+  --gradient-electric: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-rainbow: linear-gradient(
+    135deg,
+    #ff9a9e 0%,
+    #fecfef 25%,
+    #fecfef 50%,
+    #a8edea 75%,
+    #fed6e3 100%
+  );
+}
+
+/* Background Classes */
+.bg-gradient-royal {
+  background: var(--gradient-royal);
+}
+.bg-gradient-sunset {
+  background: var(--gradient-sunset);
+}
+.bg-gradient-ocean {
+  background: var(--gradient-ocean);
+}
+.bg-gradient-gold {
+  background: var(--gradient-gold);
+}
+.bg-gradient-emerald {
+  background: var(--gradient-emerald);
+}
+.bg-gradient-cosmic {
+  background: var(--gradient-cosmic);
+}
+.bg-gradient-midnight {
+  background: var(--gradient-midnight);
+}
+.bg-gradient-aurora {
+  background: var(--gradient-aurora);
+}
+.bg-gradient-fire {
+  background: var(--gradient-fire);
+}
+.bg-gradient-neon {
+  background: var(--gradient-neon);
+}
+.bg-gradient-purple-dream {
+  background: var(--gradient-purple-dream);
+}
+.bg-gradient-cyber {
+  background: var(--gradient-cyber);
+}
+.bg-gradient-luxury {
+  background: var(--gradient-luxury);
+}
+.bg-gradient-electric {
+  background: var(--gradient-electric);
+}
+.bg-gradient-rainbow {
+  background: var(--gradient-rainbow);
+}
+
+/* Border Classes */
+.border-gradient-royal {
+  border-image: var(--gradient-royal) 1;
+}
+.border-gradient-sunset {
+  border-image: var(--gradient-sunset) 1;
+}
+.border-gradient-ocean {
+  border-image: var(--gradient-ocean) 1;
+}
+.border-gradient-gold {
+  border-image: var(--gradient-gold) 1;
+}
+.border-gradient-emerald {
+  border-image: var(--gradient-emerald) 1;
+}
+.border-gradient-cosmic {
+  border-image: var(--gradient-cosmic) 1;
+}
+.border-gradient-midnight {
+  border-image: var(--gradient-midnight) 1;
+}
+.border-gradient-aurora {
+  border-image: var(--gradient-aurora) 1;
+}
+.border-gradient-fire {
+  border-image: var(--gradient-fire) 1;
+}
+.border-gradient-neon {
+  border-image: var(--gradient-neon) 1;
+}
+.border-gradient-purple-dream {
+  border-image: var(--gradient-purple-dream) 1;
+}
+.border-gradient-cyber {
+  border-image: var(--gradient-cyber) 1;
+}
+.border-gradient-luxury {
+  border-image: var(--gradient-luxury) 1;
+}
+.border-gradient-electric {
+  border-image: var(--gradient-electric) 1;
+}
+.border-gradient-rainbow {
+  border-image: var(--gradient-rainbow) 1;
+}
+
+/* Text Gradient Classes */
+.text-gradient-royal {
+  background: var(--gradient-royal);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.text-gradient-sunset {
+  background: var(--gradient-sunset);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.text-gradient-ocean {
+  background: var(--gradient-ocean);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.text-gradient-gold {
+  background: var(--gradient-gold);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.text-gradient-emerald {
+  background: var(--gradient-emerald);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.text-gradient-cosmic {
+  background: var(--gradient-cosmic);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.text-gradient-midnight {
+  background: var(--gradient-midnight);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.text-gradient-aurora {
+  background: var(--gradient-aurora);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.text-gradient-fire {
+  background: var(--gradient-fire);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.text-gradient-neon {
+  background: var(--gradient-neon);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.text-gradient-purple-dream {
+  background: var(--gradient-purple-dream);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.text-gradient-cyber {
+  background: var(--gradient-cyber);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.text-gradient-luxury {
+  background: var(--gradient-luxury);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.text-gradient-electric {
+  background: var(--gradient-electric);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.text-gradient-rainbow {
+  background: var(--gradient-rainbow);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Gradient Border with Pseudo Elements (Better browser support) */
+.gradient-border-royal {
+  position: relative;
+  background: white;
+  border-radius: 0.5rem;
+}
+.gradient-border-royal::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  background: var(--gradient-royal);
+  border-radius: inherit;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+}
+
+.gradient-border-sunset {
+  position: relative;
+  background: white;
+  border-radius: 0.5rem;
+}
+.gradient-border-sunset::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  background: var(--gradient-sunset);
+  border-radius: inherit;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+}
+
+.gradient-border-ocean {
+  position: relative;
+  background: white;
+  border-radius: 0.5rem;
+}
+.gradient-border-ocean::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  background: var(--gradient-ocean);
+  border-radius: inherit;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+}
+
+.gradient-border-emerald {
+  position: relative;
+  background: white;
+  border-radius: 0.5rem;
+}
+.gradient-border-emerald::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  background: var(--gradient-emerald);
+  border-radius: inherit;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+}
+
+/* Shadow Classes with Gradients */
+.shadow-gradient-royal {
+  box-shadow: 0 10px 25px -5px rgba(102, 126, 234, 0.4),
+    0 10px 10px -5px rgba(118, 75, 162, 0.2);
+}
+.shadow-gradient-sunset {
+  box-shadow: 0 10px 25px -5px rgba(240, 147, 251, 0.4),
+    0 10px 10px -5px rgba(245, 87, 108, 0.2);
+}
+.shadow-gradient-ocean {
+  box-shadow: 0 10px 25px -5px rgba(79, 172, 254, 0.4),
+    0 10px 10px -5px rgba(0, 242, 254, 0.2);
+}
+.shadow-gradient-emerald {
+  box-shadow: 0 10px 25px -5px rgba(17, 153, 142, 0.4),
+    0 10px 10px -5px rgba(56, 239, 125, 0.2);
+}

@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql" // or MySQL
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String   @id @default(cuid())
+  walletAddress  String   @unique
+  fullName       String
+  username       String?
+  onboardingStep Int      @default(0) // Tracks onboarding progress
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  hedges         Hedge[]
+  faucetClaimed  Boolean  @default(false)
+}
+
+model Hedge {
+  id             String         @id @default(cuid())
+  user           User           @relation(fields: [userId], references: [id])
+  userId         String
+  crop           String // e.g., Maize, Coffee
+  amount         Float // Amount in bags or units
+  entryPrice     Float // The price user wants to hedge at
+  targetPrice    Float // Price at which user wants to sell
+  marketPrice    Float // Market price at creation
+  expireAt       DateTime // Hedge expiration/maturity date
+  status         HedgeStatus    @default(PENDING)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  hedgeHistories HedgeHistory[] // Log of executions or price updates
+}
+
+model Crop {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  unit      String // e.g., "bag", "kg"
+  price     Float? // optional, can be updated from oracle
+  createdAt DateTime @default(now())
+}
+
+model HedgeHistory {
+  id            String   @id @default(cuid())
+  hedge         Hedge    @relation(fields: [hedgeId], references: [id])
+  hedgeId       String
+  executedPrice Float
+  executedAt    DateTime @default(now())
+}
+
+enum HedgeStatus {
+  PENDING
+  EXECUTED
+  CLOSED
+}

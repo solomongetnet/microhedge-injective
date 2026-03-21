@@ -1,0 +1,65 @@
+{
+	"compiler": {
+		"version": "0.8.30+commit.73712a01"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "commodity",
+						"type": "string"
+					}
+				],
+				"name": "getPrice",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"HedgeContract.sol": "IPriceOracle"
+		},
+		"evmVersion": "prague",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"HedgeContract.sol": {
+			"keccak256": "0x83518612fa3455834bb5ab2f1e59b4ec2bb7bcc8bcad9a0392b3f68bb2ecf0f4",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://a7ace81dbb1cfeef496a2d5ff148190a7d0f44b9ccfd60d19d2601f6c2aa22f3",
+				"dweb:/ipfs/QmXxpnPvEJ5bBxuM3ME3Dk9VacCXGcugjQ2fRx6cmqDaK7"
+			]
+		}
+	},
+	"version": 1
+}
