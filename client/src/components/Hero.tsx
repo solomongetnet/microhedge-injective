@@ -23,12 +23,12 @@ export default function Hero() {
       <div className="h-8 md:h-[32px]" />
 
       {/* Headline */}
-      <h1 className="font-grotesk text-[clamp(32px,10vw,96px)] font-bold text-black dark:text-[#F5F5F0] tracking-[-1px] leading-none text-center w-full max-w-[1100px]">
+      <h1 className="font-grotesk text-[clamp(28px,8vw,86px)] font-bold text-black dark:text-[#F5F5F0] tracking-[-1px] leading-none text-center w-full max-w-[1000px]">
         <GlitchText text="DEFI PROTECTION" speed={45} delay={100} />
         <br />
         <GlitchText text="FOR FARMERS." speed={45} delay={400} />
       </h1>
-      <h1 className="font-grotesk text-[clamp(32px,10vw,96px)] font-bold text-[#00DC82] dark:text-[#FFD600] tracking-[-1px] leading-none text-center w-full max-w-[1100px]">
+      <h1 className="font-grotesk text-[clamp(28px,8vw,86px)] font-bold text-[#00DC82] dark:text-[#FFD600] tracking-[-1px] leading-none text-center w-full max-w-[1000px]">
         <GlitchText text="POWERED BY INJECTIVE." speed={45} delay={700} />
       </h1>
 
