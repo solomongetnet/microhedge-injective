@@ -41,17 +41,15 @@ Everything runs seamlessly on **Injective**, providing fast, low-fee, and secure
 - TailwindCSS  
 
 **Blockchain & Smart Contract**  
-- Injective Protocol (Testnet & Mainnet)  
-- Solidity / Rust  
+- Injective Protocol (Testnet)  
+- Solidity  
 - **Hardhat, Foundry, Wagmi, Viem** for web3 integration and deployment  
 - Mock USDT for Testnet  
 - Price Oracle integration  
 
 **Web3 & Tooling**  
-- WalletConnect / MetaMask  
-- Injective JS SDK  
+- WalletConnect / MetaMask / Base ..
 - Prisma / Node.js backend  
-- Cloudinary for media assets  
 
 **AI Integration**  
 - AI-driven hedge recommendations already integrated  
