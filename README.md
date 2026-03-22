@@ -26,7 +26,7 @@ Across emerging markets, farmers and small enterprises suffer from **unstable co
 4. **Lock Funds in USDT** – Users lock USDT (mock USDT on Injective Testnet for testing).  
 5. **AI Hedge Recommendation** – Integrated AI suggests optimal hedge parameters.  
 6. **Smart Contract Logic** – Smart contracts manage hedges automatically.  
-7. **Settlement**:  
+7. **Settlement**:  At expiry, the Price Oracle provides the real market price:
    - If market price < strike → user is protected  
    - If market price > strike → user benefits from upside  
 
