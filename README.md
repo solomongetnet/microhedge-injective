@@ -122,8 +122,7 @@ Everything runs seamlessly on **Injective**, providing fast, low-fee, and secure
 ## 📺 Related Media
 
 - [Live App](https://micro-hedge.vercel.app)  
-- (Add your project demo video link here)
-
+- https://youtu.be/LiIWqH1ZT_g
 ---
 
 ## 📄 Summary
