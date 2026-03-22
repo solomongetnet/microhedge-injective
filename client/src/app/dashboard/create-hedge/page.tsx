@@ -96,6 +96,7 @@ function CreateHedgeForm() {
   const { data: faucetStatus, isLoading: isFaucetStatusLoading, error: faucetStatusError } = useCheckFaucetClaimedQuery(address);
   const { mutateAsync: markFaucetClaimed } = useMarkFaucetClaimedMutation();
 
+  console.log('faucetStatus- faucetStatus', { faucetStatus })
   const {
     writeContract: claimFaucet,
     data: faucetTxHash,
@@ -157,7 +158,7 @@ function CreateHedgeForm() {
         const oracleContract = new ethers.Contract(PRICE_ORACLE_ADDRESS, priceOracleAbi, provider);
 
         const [symbols, prices]: [string[], bigint[]] = await oracleContract.getAllPrices();
-        
+
         const list: OnChainCommodity[] = symbols.map((symbol, index) => {
           const priceInCents = Number(prices[index]);
           const localMeta = LOCAL_COMMODITIES.find(c => c.symbol === symbol);
@@ -169,7 +170,7 @@ function CreateHedgeForm() {
         });
 
         setOnChainCommodities(list);
-        
+
         // Initial selection logic
         const urlSelected = searchParams.get("selected");
         if (urlSelected) {
@@ -201,14 +202,14 @@ function CreateHedgeForm() {
   useEffect(() => {
     const fetchAiAnalysis = async () => {
       if (!selectedSymbol || !selectedCommodity) return;
-      
+
       setIsAiThinking(true);
       // Small delay to feel more "simulated" and natural
       const debounceTimer = setTimeout(async () => {
         try {
           const prompt = `Analyze a hedge for ${selectedCommodity.name} (${selectedSymbol}) with a strike price of $${strikePrice || selectedCommodity.price}.`;
           const response = await aiAction({ message: prompt });
-          
+
           if (response.success) {
             setAiAnalysis(response.reply);
             setAiConfidence(Math.floor(Math.random() * (95 - 75 + 1) + 75)); // Random confidence between 75-95%
@@ -333,7 +334,7 @@ function CreateHedgeForm() {
   // ── Submit Handler ───────────────────────────────────────────────
   const executeCreateHedge = () => {
     const strikePriceWei = parseEther(strikePrice);
-    
+
     createHedge({
       address: HEDGE_CONTRACT_ADDRESS as `0x${string}`,
       abi: hedgeAbi,
@@ -543,8 +544,8 @@ function CreateHedgeForm() {
                     onClick={() => setSelectedSymbol(c.symbol)}
                     disabled={isLoading}
                     className={`p-5 rounded-[24px] flex flex-col items-center gap-2 transition-all duration-300 border-2 ${selectedSymbol === c.symbol
-                        ? "bg-[#fce4ec]/30 border-[#d80073] shadow-md scale-[1.02]"
-                        : "bg-gray-50 border-transparent hover:bg-gray-100"
+                      ? "bg-[#fce4ec]/30 border-[#d80073] shadow-md scale-[1.02]"
+                      : "bg-gray-50 border-transparent hover:bg-gray-100"
                       }`}
                   >
                     <div className="w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center">
@@ -600,8 +601,8 @@ function CreateHedgeForm() {
                     onClick={() => setExpireOption(opt.id)}
                     disabled={isLoading}
                     className={`flex-1 py-4 rounded-2xl font-bold transition-all border-2 ${expireOption === opt.id
-                        ? "bg-[#d80073] text-white border-[#d80073] shadow-lg shadow-[#d80073]/20"
-                        : "bg-gray-50 text-gray-500 border-transparent hover:bg-gray-100"
+                      ? "bg-[#d80073] text-white border-[#d80073] shadow-lg shadow-[#d80073]/20"
+                      : "bg-gray-50 text-gray-500 border-transparent hover:bg-gray-100"
                       }`}
                   >
                     {opt.label}
@@ -623,8 +624,8 @@ function CreateHedgeForm() {
               onClick={handleCreateHedge}
               disabled={isLoading}
               className={`w-full py-6 rounded-[24px] font-black text-xl flex justify-center items-center gap-3 transition-all active:scale-[0.98] ${phase === "done"
-                  ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/20"
-                  : "bg-[#d80073] text-white shadow-xl shadow-[#d80073]/20 hover:bg-[#c20067]"
+                ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/20"
+                : "bg-[#d80073] text-white shadow-xl shadow-[#d80073]/20 hover:bg-[#c20067]"
                 }`}
             >
               {isLoading ? (
@@ -688,9 +689,9 @@ function CreateHedgeForm() {
                       <span className="font-black text-amber-300">{aiConfidence}%</span>
                     </div>
                     <div className="h-1 bg-white/10 rounded-full overflow-hidden">
-                      <div 
-                        className="h-full bg-amber-300 transition-all duration-1000 ease-out" 
-                        style={{ width: `${aiConfidence}%` }} 
+                      <div
+                        className="h-full bg-amber-300 transition-all duration-1000 ease-out"
+                        style={{ width: `${aiConfidence}%` }}
                       />
                     </div>
                     <p className="text-[10px] font-medium opacity-60 uppercase tracking-widest">Injective Mainnet Data Integrated</p>
