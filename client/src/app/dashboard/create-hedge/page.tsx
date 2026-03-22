@@ -462,7 +462,7 @@ function CreateHedgeForm() {
         </div>
 
         <div className="max-w-2xl mx-auto py-12">
-          <Card className="bg-white rounded-[40px] border-none shadow-xl overflow-hidden">
+          <Card className="bg-white py-0 rounded-[40px] border-none shadow-xl overflow-hidden">
             <div className="bg-gradient-to-br from-[#fce4ec] to-[#f8bbd0] p-12 flex flex-col items-center text-center gap-6">
               <div className="w-24 h-24 rounded-full bg-white shadow-lg flex items-center justify-center text-4xl">
                 💰

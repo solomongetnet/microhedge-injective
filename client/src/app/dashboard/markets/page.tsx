@@ -10,6 +10,7 @@ import { PRICE_ORACLE_ADDRESS, priceOracleAbi } from "@/lib/contracts";
 import { COMMODITIES as LOCAL_COMMODITIES } from "@/lib/commodities";
 import { toast } from "sonner";
 import Link from "next/link";
+import { MarketDetailModal } from "@/components/dashboard/market-detail-modal";
 
 // ─── Types ────────────────────────────────────────────────────────
 interface MarketCommodity {
@@ -64,6 +65,8 @@ export default function MarketsPage() {
   const [markets, setMarkets] = useState<MarketCommodity[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [selectedMarket, setSelectedMarket] = useState<MarketCommodity | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchMarketData = async (isRefresh = false) => {
     if (!window.ethereum) return;
@@ -159,7 +162,7 @@ export default function MarketsPage() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {markets.map((market) => (
-            <Card key={market.id} className="bg-white border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 rounded-[32px] overflow-hidden group flex flex-col">
+            <Card key={market.id} className="bg-white border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 rounded-[32px] overflow-hidden group flex flex-col cursor-pointer" onClick={() => { setSelectedMarket(market); setIsModalOpen(true); }}>
               <CardHeader className="pb-2">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
@@ -209,19 +212,35 @@ export default function MarketsPage() {
                     </div>
                   </div>
 
-                  <Link href={`/dashboard/create-hedge?selected=${market.symbol}`} className="block">
+                  <div className="grid grid-cols-2 gap-3" onClick={(e) => e.stopPropagation()}>
+                    <Link href={`/dashboard/create-hedge?selected=${market.symbol}`} className="block">
+                      <Button 
+                        className="w-full h-12 rounded-2xl bg-[#d80073] hover:bg-[#c20067] text-white font-black shadow-lg shadow-[#d80073]/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                      >
+                        Hedge <Plus size={18} />
+                      </Button>
+                    </Link>
                     <Button 
-                      className="w-full h-12 rounded-2xl bg-[#d80073] hover:bg-[#c20067] text-white font-black shadow-lg shadow-[#d80073]/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                      variant="outline"
+                      className="w-full h-12 rounded-2xl border-gray-100 font-bold text-gray-600 hover:bg-gray-50 transition-all flex items-center justify-center gap-2"
+                      onClick={() => { setSelectedMarket(market); setIsModalOpen(true); }}
                     >
-                      Hedge Now <Plus size={18} />
+                      Details
                     </Button>
-                  </Link>
+                  </div>
                 </div>
               </CardContent>
             </Card>
           ))}
         </div>
       )}
+
+      {/* Detail Modal */}
+      <MarketDetailModal 
+        open={isModalOpen} 
+        onOpenChange={setIsModalOpen} 
+        commodity={selectedMarket} 
+      />
 
       {/* Footer Info */}
       <div className="bg-gray-50/50 rounded-[32px] p-8 flex flex-col md:flex-row items-center gap-6 border border-gray-100">
