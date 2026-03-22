@@ -64,8 +64,6 @@ Everything runs seamlessly on **Injective**, providing fast, low-fee, and secure
 - **Price Oracle** – Feeds real commodity prices  
 - **Mock USDT** – Enables realistic testing  
 
-[View on Injective Testnet Blockscout](https://testnet.blockscout.injective.network/)
-
 ---
 
 ## 🌐 Why Injective?
