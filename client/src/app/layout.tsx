@@ -4,6 +4,7 @@ import "./globals.css";
 import ThemeWrapper from "./theme-wrapper";
 import { Toaster } from "sonner";
 import { Web3Provider } from "@/providers/web3.provider";
+import { AuthProvider } from "@/providers/auth-provider";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -50,7 +51,9 @@ export default function RootLayout({
         />
 
         <Web3Provider>
-          <ThemeWrapper>{children}</ThemeWrapper>
+          <AuthProvider>
+            <ThemeWrapper>{children}</ThemeWrapper>
+          </AuthProvider>
         </Web3Provider>
       </body>
     </html>

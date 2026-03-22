@@ -21,8 +21,8 @@ export default defineConfig({
   },
   networks: {
     injectiveTestnet: {
-      url: process.env.INJECTIVE_API_KEY || "https://sentry.tm.injective.network:443",
-      chainId: 888, // Injective testnet/mainnet: double-check if this is mainnet or testnet
+      url: process.env.INJECTIVE_API_KEY || "https://k8s.testnet.json-rpc.injective.network",
+      chainId: 1439, // Injective inEVM testnet
       accounts: [process.env.INJECTIVE_PRIVATE_KEY || "0x0000000000000000000000000000000000000000000000000000000000000000"],
     },
   },

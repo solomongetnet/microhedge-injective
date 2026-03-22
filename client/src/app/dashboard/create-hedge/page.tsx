@@ -3,19 +3,28 @@
 import { useState, useEffect, Suspense } from "react";
 import { Info, Loader2, TrendingUp, Sparkles, Brain, Lightbulb, ShieldCheck, ArrowRight, Activity, Calendar, DollarSign, Package } from "lucide-react";
 import { toast } from "sonner";
-import { useSearchParams } from "next/navigation";
-import { COMMODITIES } from "@/lib/commodities";
+import { useSearchParams, useRouter } from "next/navigation";
+import { COMMODITIES as LOCAL_COMMODITIES } from "@/lib/commodities";
 import { ai as aiAction } from "@/actions/ai.actions";
+import { ethers } from "ethers";
 import {
+  FUSDT_CONTRACT_ADDRESS,
   HEDGE_CONTRACT_ADDRESS,
+  PRICE_ORACLE_ADDRESS,
   hedgeAbi,
+  priceOracleAbi,
+  mockUsdtAbi,
 } from "@/lib/contracts";
 import {
   useAccount,
   useWriteContract,
   useWaitForTransactionReceipt,
+  useReadContract,
 } from "wagmi";
 import { parseEther } from "viem";
+import { useCheckFaucetClaimedQuery, useMarkFaucetClaimedMutation } from "@/hooks/api/use-user";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 
 // ─── Expire Options ────────────────────────────────────────────────
 const EXPIRE_OPTIONS = [
@@ -23,6 +32,34 @@ const EXPIRE_OPTIONS = [
   { id: 2, label: "7 Days" },
   { id: 3, label: "14 Days" },
   { id: 4, label: "30 Days" },
+] as const;
+
+// ─── Standard ERC20 ABI ───────────────────────────────────────────
+const erc20Abi = [
+  {
+    constant: false,
+    inputs: [
+      { name: "_spender", type: "address" },
+      { name: "_value", type: "uint256" },
+    ],
+    name: "approve",
+    outputs: [{ name: "", type: "bool" }],
+    payable: false,
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    constant: true,
+    inputs: [
+      { name: "_owner", type: "address" },
+      { name: "_spender", type: "address" },
+    ],
+    name: "allowance",
+    outputs: [{ name: "", type: "uint256" }],
+    payable: false,
+    stateMutability: "view",
+    type: "function",
+  },
 ] as const;
 
 // ─── Commodity Icon ────────────────────────────────────────────────
@@ -42,16 +79,118 @@ function CommodityIcon({ symbol }: { symbol: string }) {
   return <span className="text-xl">{icons[key] ?? "📦"}</span>;
 }
 
+// ─── Types ────────────────────────────────────────────────────────
+interface OnChainCommodity {
+  symbol: string;
+  name: string;
+  price: number;
+}
+
 // ─── Form Component ───────────────────────────────────────────────
 function CreateHedgeForm() {
   const { address, isConnected } = useAccount();
   const searchParams = useSearchParams();
+  const router = useRouter();
 
-  const [selectedSymbol, setSelectedSymbol] = useState(COMMODITIES[0].symbol);
+  // ── Faucet Claim Logic ──────────────────────────────────────────
+  const { data: faucetStatus, isLoading: isFaucetStatusLoading, error: faucetStatusError } = useCheckFaucetClaimedQuery(address);
+  const { mutateAsync: markFaucetClaimed } = useMarkFaucetClaimedMutation();
+
+  const {
+    writeContract: claimFaucet,
+    data: faucetTxHash,
+    isPending: isFaucetWritePending,
+    error: faucetWriteError,
+    reset: resetFaucet,
+  } = useWriteContract();
+
+  const {
+    isLoading: isFaucetMining,
+    isSuccess: isFaucetSuccess,
+    error: faucetMineError,
+  } = useWaitForTransactionReceipt({
+    hash: faucetTxHash,
+  });
+
+  useEffect(() => {
+    if (isFaucetSuccess && address) {
+      markFaucetClaimed(address).then(() => {
+        toast.success("Mock USDT Claimed! 💰", { description: "You now have 100 Test USDT to start hedging." });
+      });
+    }
+  }, [isFaucetSuccess, address]);
+
+  useEffect(() => {
+    const err = faucetWriteError || faucetMineError;
+    if (err) {
+      toast.error("Faucet Claim Failed", { description: (err as any).shortMessage || err.message });
+      resetFaucet();
+    }
+  }, [faucetWriteError, faucetMineError, resetFaucet]);
+
+  const handleClaimFaucet = () => {
+    if (!address) return;
+    claimFaucet({
+      address: FUSDT_CONTRACT_ADDRESS as `0x${string}`,
+      abi: mockUsdtAbi,
+      functionName: "faucet",
+      gas: BigInt(100000),
+    });
+  };
+
+  const [onChainCommodities, setOnChainCommodities] = useState<OnChainCommodity[]>([]);
+  const [selectedSymbol, setSelectedSymbol] = useState("");
   const [strikePrice, setStrikePrice] = useState("");
   const [expireOption, setExpireOption] = useState<1 | 2 | 3 | 4>(2);
 
   const [phase, setPhase] = useState<"idle" | "creating" | "done">("idle");
+  const [isSyncing, setIsSyncing] = useState(true);
+
+  // ── Fetch On-Chain Commodities ───────────────────────────────────
+  useEffect(() => {
+    const fetchOnChainData = async () => {
+      if (!window.ethereum) return;
+      setIsSyncing(true);
+
+      try {
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const oracleContract = new ethers.Contract(PRICE_ORACLE_ADDRESS, priceOracleAbi, provider);
+
+        const [symbols, prices]: [string[], bigint[]] = await oracleContract.getAllPrices();
+        
+        const list: OnChainCommodity[] = symbols.map((symbol, index) => {
+          const priceInCents = Number(prices[index]);
+          const localMeta = LOCAL_COMMODITIES.find(c => c.symbol === symbol);
+          return {
+            symbol: symbol,
+            name: localMeta?.name || `${symbol} Futures`,
+            price: priceInCents / 100
+          };
+        });
+
+        setOnChainCommodities(list);
+        
+        // Initial selection logic
+        const urlSelected = searchParams.get("selected");
+        if (urlSelected) {
+          const match = list.find(c => c.symbol.toUpperCase() === urlSelected.toUpperCase());
+          if (match) setSelectedSymbol(match.symbol);
+          else if (list.length > 0) setSelectedSymbol(list[0].symbol);
+        } else if (list.length > 0) {
+          setSelectedSymbol(list[0].symbol);
+        }
+      } catch (err) {
+        console.error("Failed to fetch on-chain commodities:", err);
+        toast.error("Oracle Sync Failed", { description: "Could not load on-chain commodities." });
+      } finally {
+        setIsSyncing(false);
+      }
+    };
+
+    fetchOnChainData();
+  }, [searchParams]);
+
+  const selectedCommodity = onChainCommodities.find(c => c.symbol === selectedSymbol);
 
   // ── AI Simulation State ──────────────────────────────────────────
   const [aiAnalysis, setAiAnalysis] = useState<string>("");
@@ -61,13 +200,13 @@ function CreateHedgeForm() {
   // Trigger AI Analysis when symbol or strike price changes
   useEffect(() => {
     const fetchAiAnalysis = async () => {
-      if (!selectedSymbol) return;
+      if (!selectedSymbol || !selectedCommodity) return;
       
       setIsAiThinking(true);
       // Small delay to feel more "simulated" and natural
       const debounceTimer = setTimeout(async () => {
         try {
-          const prompt = `Analyze a hedge for ${selectedSymbol} with a strike price of $${strikePrice || "market price"}.`;
+          const prompt = `Analyze a hedge for ${selectedCommodity.name} (${selectedSymbol}) with a strike price of $${strikePrice || selectedCommodity.price}.`;
           const response = await aiAction({ message: prompt });
           
           if (response.success) {
@@ -78,7 +217,7 @@ function CreateHedgeForm() {
           }
         } catch (err) {
           // Graceful fallback to mock data
-          setAiAnalysis(`Based on historical data for ${selectedSymbol}, a ${strikePrice ? `$${strikePrice} strike` : "current market entry"} represents a balanced risk profile. We recommend a 14-day duration to capture expected volatility.`);
+          setAiAnalysis(`Based on historical data for ${selectedCommodity.name}, a ${strikePrice ? `$${strikePrice} strike` : "current market entry"} represents a balanced risk profile. We recommend a 14-day duration to capture expected volatility.`);
           setAiConfidence(82);
         } finally {
           setIsAiThinking(false);
@@ -89,27 +228,38 @@ function CreateHedgeForm() {
     };
 
     fetchAiAnalysis();
-  }, [selectedSymbol, strikePrice]);
+  }, [selectedSymbol, strikePrice, selectedCommodity]);
 
-  // Read search parameter on mount
-  useEffect(() => {
-    const selected = searchParams.get("selected");
-    if (selected) {
-      const match = COMMODITIES.find(
-        (c) =>
-          c.symbol.toUpperCase() === selected.toUpperCase() ||
-          c.name.toUpperCase() === selected.toUpperCase()
-      );
-      if (match) {
-        setSelectedSymbol(match.symbol);
-      }
+  // ── USDT Allowance Check ──────────────────────────────────────────
+  const { data: allowance, refetch: refetchAllowance } = useReadContract({
+    address: FUSDT_CONTRACT_ADDRESS as `0x${string}`,
+    abi: erc20Abi,
+    functionName: "allowance",
+    args: address ? [address, HEDGE_CONTRACT_ADDRESS as `0x${string}`] : undefined,
+    query: {
+      enabled: !!address,
     }
-  }, [searchParams]);
+  });
 
-  const selectedCommodity =
-    COMMODITIES.find((c) => c.symbol === selectedSymbol) ?? COMMODITIES[0];
+  // ── Contract Writer: Approve ──────────────────────────────────────
+  const {
+    writeContract: approveUsdt,
+    data: approveTxHash,
+    isPending: isApproveWritePending,
+    error: approveWriteError,
+    reset: resetApprove,
+  } = useWriteContract();
 
-  // ── Contract Writer ──────────────────────────────────────────────
+  const {
+    isLoading: isApproveMining,
+    isSuccess: isApproveSuccess,
+    isError: isApproveMineError,
+    error: approveMineError,
+  } = useWaitForTransactionReceipt({
+    hash: approveTxHash,
+  });
+
+  // ── Contract Writer: Create Hedge ──────────────────────────────────
   const {
     writeContract: createHedge,
     data: createTxHash,
@@ -131,40 +281,74 @@ function CreateHedgeForm() {
     },
   });
 
+  // ── Automatic Creation After Approval ───────────────────────────
+  useEffect(() => {
+    if (isApproveSuccess && phase === "creating") {
+      refetchAllowance().then(() => {
+        executeCreateHedge();
+      });
+    }
+  }, [isApproveSuccess, phase]);
+
   // ── Success Handler ──────────────────────────────────────────────
   useEffect(() => {
     if (isCreateSuccess && createTxHash) {
       setPhase("done");
       toast.success("Hedge Created! 🎉", {
-        description: `Your ${selectedSymbol} hedge is now live on-chain.`,
+        description: `Your ${selectedSymbol} hedge is now live on-chain. Redirecting to My Hedges in 3 seconds...`,
         action: {
           label: "View Tx",
-          onClick: () => window.open(`https://testnet.blockscout.injective.network/${createTxHash}`, '_blank')
+          onClick: () => window.open(`https://testnet.blockscout.injective.network/tx/${createTxHash}`, '_blank')
         }
       });
+
+      // Navigate to My Hedges after 3 seconds
+      const timer = setTimeout(() => {
+        router.push("/dashboard/my-hedges");
+      }, 3000);
+
+      return () => clearTimeout(timer);
     }
-  }, [isCreateSuccess, selectedSymbol, createTxHash]);
+  }, [isCreateSuccess, selectedSymbol, createTxHash, router]);
 
   // ── Error Handling ───────────────────────────────────────────────
   useEffect(() => {
-    const err = createWriteError || createMineError;
+    const err = createWriteError || createMineError || approveWriteError || approveMineError;
     if (!err) return;
 
     setPhase("idle");
-    resetCreate(); // Clear the hash and error to stop the loader
+    resetCreate();
+    resetApprove();
 
     const msg =
       (err as any)?.shortMessage ||
       (err as any)?.message ||
       "Transaction failed";
 
-    toast.error("Creation Failed", {
+    toast.error("Transaction Failed", {
       description: msg,
     });
-  }, [createWriteError, createMineError, resetCreate]);
+  }, [createWriteError, createMineError, approveWriteError, approveMineError, resetCreate, resetApprove]);
 
   // ── Submit Handler ───────────────────────────────────────────────
-  const handleCreateHedge = () => {
+  const executeCreateHedge = () => {
+    const strikePriceWei = parseEther(strikePrice);
+    
+    createHedge({
+      address: HEDGE_CONTRACT_ADDRESS as `0x${string}`,
+      abi: hedgeAbi,
+      functionName: "createHedge",
+      args: [
+        selectedSymbol,             // commodity symbol (e.g. COFFEE)
+        BigInt(1),                 // amount = 1
+        strikePriceWei,           // strikePrice in 18-decimal wei
+        BigInt(expireOption),      // expireOption 1–4
+      ],
+      gas: BigInt(1000000),        // Explicit gas limit for Injective Testnet reliability
+    });
+  };
+
+  const handleCreateHedge = async () => {
     if (phase === "done") {
       handleReset();
       return;
@@ -185,23 +369,33 @@ function CreateHedgeForm() {
       return;
     }
 
+    if (!selectedCommodity) {
+      toast.error("Invalid Selection", {
+        description: "Please select a valid commodity.",
+      });
+      return;
+    }
+
     resetCreate();
-
-    const strikePriceWei = parseEther(strikePrice);
-
+    resetApprove();
     setPhase("creating");
 
-    createHedge({
-      address: HEDGE_CONTRACT_ADDRESS as `0x${string}`,
-      abi: hedgeAbi,
-      functionName: "createHedge",
-      args: [
-        selectedCommodity.symbol,   // commodity symbol (e.g. COFFEE)
-        BigInt(1),                 // amount = 1
-        strikePriceWei,           // strikePrice in 18-decimal wei
-        BigInt(expireOption),      // expireOption 1–4
-      ],
-    });
+    const strikePriceWei = parseEther(strikePrice);
+    const requiredAllowance = strikePriceWei; // amount=1, so totalValue = strikePriceWei
+
+    // Check if we need approval
+    if (!allowance || (allowance as bigint) < requiredAllowance) {
+      toast.info("Approval Required", { description: "Please approve Mock USDT to proceed with the hedge." });
+      approveUsdt({
+        address: FUSDT_CONTRACT_ADDRESS as `0x${string}`,
+        abi: erc20Abi,
+        functionName: "approve",
+        args: [HEDGE_CONTRACT_ADDRESS as `0x${string}`, ethers.MaxUint256],
+        gas: BigInt(100000), // Buffer for Injective
+      });
+    } else {
+      executeCreateHedge();
+    }
   };
 
   // ── Reset ────────────────────────────────────────────────────────
@@ -210,17 +404,103 @@ function CreateHedgeForm() {
     setStrikePrice("");
     setExpireOption(2);
     resetCreate();
+    resetApprove();
   };
 
   // ── UI State ─────────────────────────────────────────────────────
-  const isLoading = isCreateWritePending || isCreateMining;
+  const isLoading = isCreateWritePending || isCreateMining || isApproveWritePending || isApproveMining;
 
   const buttonLabel = () => {
-    if (isCreateWritePending) return "Confirming in Wallet...";
+    if (isApproveWritePending) return "Confirming Approval...";
+    if (isApproveMining) return "Approving USDT...";
+    if (isCreateWritePending) return "Confirming Creation...";
     if (isCreateMining) return "Creating Hedge On-Chain...";
     if (phase === "done") return "Create Another Hedge";
     return "Create Hedge";
   };
+
+  if (!isConnected || !address) {
+    return (
+      <div className="w-full h-[60vh] flex flex-col items-center justify-center gap-6">
+        <div className="w-20 h-20 bg-gray-50 rounded-3xl flex items-center justify-center text-4xl shadow-inner">
+          🔌
+        </div>
+        <div className="text-center space-y-2">
+          <h1 className="text-3xl font-black text-gray-900 tracking-tight">Connect Your Wallet</h1>
+          <p className="text-gray-500 font-medium max-w-sm mx-auto">
+            Please connect your wallet to verify your account status and start hedging.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (isFaucetStatusLoading) {
+    return (
+      <div className="w-full h-[60vh] flex flex-col items-center justify-center gap-4">
+        <Loader2 className="w-10 h-10 text-[#d80073] animate-spin" />
+        <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">Verifying Account Status...</p>
+      </div>
+    );
+  }
+
+  if (!faucetStatus?.claimed) {
+    return (
+      <div className="w-full space-y-8 p-6">
+        <div className="flex flex-col gap-2">
+          <h1 className="text-4xl font-black text-gray-900 tracking-tight">
+            Claim Your Test Tokens
+          </h1>
+          <p className="text-gray-500 font-medium">
+            To start hedging agricultural assets, you need mock USDT tokens. Claim them once to activate your account.
+          </p>
+        </div>
+
+        <div className="max-w-2xl mx-auto py-12">
+          <Card className="bg-white rounded-[40px] border-none shadow-xl overflow-hidden">
+            <div className="bg-gradient-to-br from-[#fce4ec] to-[#f8bbd0] p-12 flex flex-col items-center text-center gap-6">
+              <div className="w-24 h-24 rounded-full bg-white shadow-lg flex items-center justify-center text-4xl">
+                💰
+              </div>
+              <div className="space-y-2">
+                <h2 className="text-3xl font-black text-gray-900">100 Test USDT</h2>
+                <p className="text-gray-600 font-medium max-w-sm">
+                  This will provide you with enough test funds to experiment with hedging strategies on Injective.
+                </p>
+              </div>
+
+              <div className="w-full pt-6">
+                <Button
+                  onClick={handleClaimFaucet}
+                  disabled={isFaucetWritePending || isFaucetMining}
+                  className="w-full py-8 rounded-[24px] bg-[#d80073] hover:bg-[#c20067] text-white font-black text-xl shadow-xl shadow-[#d80073]/20 transition-all active:scale-[0.98]"
+                >
+                  {isFaucetWritePending ? (
+                    <>
+                      <Loader2 className="animate-spin mr-2" />
+                      Waiting for Wallet...
+                    </>
+                  ) : isFaucetMining ? (
+                    <>
+                      <Loader2 className="animate-spin mr-2" />
+                      Claiming on Injective...
+                    </>
+                  ) : (
+                    <>
+                      Claim Test USDT <ArrowRight className="ml-2" />
+                    </>
+                  )}
+                </Button>
+                <p className="mt-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                  Gas fees are covered by Injective Testnet
+                </p>
+              </div>
+            </div>
+          </Card>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full space-y-8 p-6">
@@ -247,22 +527,39 @@ function CreateHedgeForm() {
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {COMMODITIES.map((c) => (
-                <button
-                  key={c.symbol}
-                  onClick={() => setSelectedSymbol(c.symbol)}
-                  disabled={isLoading}
-                  className={`p-5 rounded-[24px] flex flex-col items-center gap-3 transition-all duration-300 border-2 ${selectedSymbol === c.symbol
-                      ? "bg-[#fce4ec]/30 border-[#d80073] shadow-md scale-[1.02]"
-                      : "bg-gray-50 border-transparent hover:bg-gray-100"
-                    }`}
-                >
-                  <div className="w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center">
-                    <CommodityIcon symbol={c.symbol} />
-                  </div>
-                  <div className="font-black text-xs uppercase tracking-widest text-gray-700">{c.symbol}</div>
-                </button>
-              ))}
+              {isSyncing ? (
+                <div className="col-span-full py-12 flex flex-col items-center justify-center gap-4 bg-gray-50 rounded-[24px] border-2 border-dashed border-gray-200">
+                  <Loader2 className="w-8 h-8 text-[#d80073] animate-spin" />
+                  <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px]">Syncing On-Chain Assets...</p>
+                </div>
+              ) : onChainCommodities.length === 0 ? (
+                <div className="col-span-full py-12 flex flex-col items-center justify-center gap-2 bg-gray-50 rounded-[24px] border-2 border-dashed border-gray-200">
+                  <p className="text-gray-500 font-bold">No assets found on-chain.</p>
+                </div>
+              ) : (
+                onChainCommodities.map((c) => (
+                  <button
+                    key={c.symbol}
+                    onClick={() => setSelectedSymbol(c.symbol)}
+                    disabled={isLoading}
+                    className={`p-5 rounded-[24px] flex flex-col items-center gap-2 transition-all duration-300 border-2 ${selectedSymbol === c.symbol
+                        ? "bg-[#fce4ec]/30 border-[#d80073] shadow-md scale-[1.02]"
+                        : "bg-gray-50 border-transparent hover:bg-gray-100"
+                      }`}
+                  >
+                    <div className="w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center">
+                      <CommodityIcon symbol={c.symbol} />
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <div className="font-black text-xs uppercase tracking-widest text-gray-700">{c.symbol}</div>
+                      <div className="flex items-center gap-1">
+                        <div className="w-1 h-1 rounded-full bg-[#d80073] animate-pulse" />
+                        <div className="text-[10px] font-bold text-[#d80073] tracking-tighter">${c.price.toFixed(2)}</div>
+                      </div>
+                    </div>
+                  </button>
+                ))
+              )}
             </div>
           </div>
 

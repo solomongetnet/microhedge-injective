@@ -2,9 +2,33 @@ import {
   getUserProfileAction,
   onboardUserAction,
   updateUserProfileAction,
+  checkFaucetClaimedAction,
+  markFaucetClaimedAction,
 } from "@/actions/user.actions";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+
+export const useCheckFaucetClaimedQuery = (walletAddress: string | undefined) => {
+  return useQuery({
+    queryKey: ["faucet_claimed", walletAddress],
+    queryFn: () => checkFaucetClaimedAction(walletAddress!),
+    enabled: !!walletAddress,
+  });
+};
+
+export const useMarkFaucetClaimedMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (walletAddress: string) => markFaucetClaimedAction(walletAddress),
+    onSuccess: (result) => {
+      if (result.success) {
+        queryClient.invalidateQueries({ queryKey: ["faucet_claimed"] });
+        queryClient.invalidateQueries({ queryKey: ["user_profile"] });
+      }
+    },
+  });
+};
 
 export const useOnboardUserMutation = () => {
   const queryClient = useQueryClient();

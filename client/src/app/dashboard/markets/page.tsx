@@ -231,7 +231,7 @@ export default function MarketsPage() {
         <div className="flex-1 text-center md:text-left">
           <h4 className="font-bold text-gray-900">Oracle Data Feed</h4>
           <p className="text-sm text-gray-500 mt-1 font-medium leading-relaxed">
-            These prices are fetched directly from the Price Oracle smart contract on Moonbase Alpha. Prices are updated periodically by verified data providers to ensure accurate settlement of all hedge positions.
+            These prices are fetched directly from the Price Oracle smart contract on Injective Evm. Prices are updated periodically by verified data providers to ensure accurate settlement of all hedge positions.
           </p>
         </div>
         <div className="px-6 py-3 rounded-2xl bg-white border border-gray-100 text-xs font-black text-gray-400 uppercase tracking-widest">

@@ -29,6 +29,7 @@ import { formatEther } from "viem";
 import { HEDGE_CONTRACT_ADDRESS, PRICE_ORACLE_ADDRESS, hedgeAbi, priceOracleAbi } from "@/lib/contracts";
 import { toast } from "sonner";
 import { COMMODITIES } from "@/lib/commodities";
+import { SettlementInfoModal } from "@/components/dashboard/settlement-info-modal";
 
 // ─── Types ────────────────────────────────────────────────────────
 interface OnChainHedge {
@@ -149,14 +150,14 @@ function HedgeCard({ hedge, onSettle }: { hedge: OnChainHedge, onSettle: (id: bi
             </div>
             <div className="flex items-center justify-between">
               <span className="font-bold text-lg tracking-tight">{formatOraclePrice(hedge.currentPrice)}</span>
-              {hedge.currentPrice && (
+              {/* {hedge.currentPrice && (
                 <div className="flex flex-col items-end">
                   {isFavorable ? <ArrowUpRight size={16} /> : <ArrowDownRight size={16} />}
                   <span className="text-[10px] font-black leading-none mt-0.5">
                     {diffPercent > 0 ? "+" : ""}{diffPercent.toFixed(1)}%
                   </span>
                 </div>
-              )}
+              )} */}
             </div>
           </div>
         </div>
@@ -183,7 +184,7 @@ function HedgeCard({ hedge, onSettle }: { hedge: OnChainHedge, onSettle: (id: bi
               <span className="text-[10px] font-black uppercase tracking-tight">Locked Value</span>
             </div>
             <div className="font-black text-gray-900 text-sm">
-              {formatCurrency(hedge.lockedValue)}
+              {formatCurrency(hedge.strikePrice)}
             </div>
           </div>
         </div>
@@ -237,6 +238,7 @@ export default function MyHedgesPage() {
   const [hedges, setHedges] = useState<OnChainHedge[]>([]);
   const [loading, setLoading] = useState(false);
   const [isSettling, setIsSettling] = useState<bigint | null>(null);
+  const [infoModalOpen, setInfoModalOpen] = useState(false);
 
   const fetchOnChainData = async () => {
     if (!address || !window.ethereum) return;
@@ -323,7 +325,8 @@ export default function MyHedgesPage() {
       address: HEDGE_CONTRACT_ADDRESS as `0x${string}`,
       abi: hedgeAbi,
       functionName: "closeHedge",
-      args: [id]
+      args: [id],
+      gas: BigInt(1000000), // Explicit gas limit for Injective Testnet reliability
     }, {
       onError: (err) => {
         toast.error("Settlement Failed", { description: (err as any).shortMessage || err.message });
@@ -420,10 +423,18 @@ export default function MyHedgesPage() {
             Once a hedge expires, you can settle it to receive your payout. If the spot price is below your strike price, you're protected for the full locked value. If it's higher, you receive the current market value.
           </p>
         </div>
-        <button className="text-[#d80073] font-bold text-sm hover:underline flex items-center gap-1 shrink-0">
+        <button 
+          onClick={() => setInfoModalOpen(true)}
+          className="text-[#d80073] font-bold text-sm hover:underline flex items-center gap-1 shrink-0"
+        >
           Learn More <ExternalLink size={14} />
         </button>
       </div>
+
+      <SettlementInfoModal 
+        open={infoModalOpen} 
+        onOpenChange={setInfoModalOpen} 
+      />
 
       {/* Settle Overlay Loading */}
       {(isSettling !== null || isSettleMining) && (
