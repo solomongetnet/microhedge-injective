@@ -186,7 +186,7 @@ export function MyHedgesSection() {
                         border: "1px solid var(--border)",
                         borderRadius: "0.5rem",
                       }}
-                      formatter={(value) => `$${value.toFixed(2)}`}
+                      formatter={(value) => `$${(value as any).toFixed(2)}`}
                     />
                     <Line type="monotone" dataKey="value" stroke="var(--primary)" strokeWidth={2} dot={false} />
                   </LineChart>
