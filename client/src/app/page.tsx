@@ -15,7 +15,7 @@ import Footer from "@/components/Footer";
 export default function Home() {
   return (
     <>
-      <div className="flex flex-col w-full bg-white dark:bg-[#0A0A0A] pt-[60px] transition-colors duration-300">
+      <div className="flex flex-col w-full bg-white dark:bg-[#0A0A0A] pt-[60px] transition-colors duration-300 overflow-x-hidden">
         <Navbar />
 
         <Hero />
