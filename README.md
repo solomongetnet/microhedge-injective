@@ -121,15 +121,6 @@ Everything runs seamlessly on **Injective**, providing fast, low-fee, and secure
 
 ---
 
-## 🤝 Contributors
-
-- @zedonchain_  
-- @ericinjective  
-- @bguiz  
-- @boluwatifeamod  
-
----
-
 ## 📺 Related Media
 
 - [Live App](https://micro-hedge.vercel.app)  
