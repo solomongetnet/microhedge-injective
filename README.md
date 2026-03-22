@@ -64,6 +64,14 @@ Everything runs seamlessly on **Injective**, providing fast, low-fee, and secure
 
 ---
 
+📦 Deployed Contract Addresses on Injective
+- Price Oracle: 0x935a001F8Eb6b169CF2941512eC7AD9284bbEDCf
+- Hedge Contract: 0x1e4A9e7300601C9D5bF4A471C943DfEE8C8D8120
+- Mock USDT Contract: 0x4634E939F6E6782F0Ca4b74F497f5A79C87Fe117
+These contracts are deployed on the Injective blockchain and ready for testing and integration.
+
+---
+
 ## 🌐 Why Injective?
 
 - ⚡ Fast, low-cost transactions  
