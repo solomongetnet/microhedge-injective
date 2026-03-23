@@ -19,6 +19,7 @@ import {
   Activity,
   Plus
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { 
   useAccount, 
   useWriteContract,
@@ -31,6 +32,7 @@ import { toast } from "sonner";
 import { COMMODITIES } from "@/lib/commodities";
 import { SettlementInfoModal } from "@/components/dashboard/settlement-info-modal";
 import { WrongNetworkState } from "@/components/dashboard/wrong-network-state";
+import { HedgeDetailsModal } from "@/components/dashboard/hedge-details-modal";
 
 // ─── Types ────────────────────────────────────────────────────────
 interface OnChainHedge {
@@ -93,6 +95,7 @@ const getTimeRemaining = (expireAt: bigint) => {
 // ─── Components ───────────────────────────────────────────────────
 
 function HedgeCard({ hedge, onSettle }: { hedge: OnChainHedge, onSettle: (id: bigint) => void }) {
+  const [detailsOpen, setDetailsOpen] = useState(false);
   const status = getStatus(hedge);
   const StatusIcon = status.icon;
   const isExpired = !hedge.closed && BigInt(Math.floor(Date.now() / 1000)) >= hedge.expireAt;
@@ -192,34 +195,33 @@ function HedgeCard({ hedge, onSettle }: { hedge: OnChainHedge, onSettle: (id: bi
       </div>
 
       <div className="px-6 pb-6 pt-2 space-y-3">
-        {/* Action */}
-        {!hedge.closed && (
-          <button
-            onClick={() => isExpired && onSettle(hedge.id)}
-            disabled={!isExpired}
-            className={`w-full py-4 rounded-2xl font-bold transition-all flex items-center justify-center gap-2 ${
-              isExpired 
-                ? "bg-[#d80073] text-white shadow-lg shadow-[#d80073]/20 hover:bg-[#c20067] active:scale-[0.98]" 
-                : "bg-gray-100 text-gray-400 cursor-not-allowed"
-            }`}
+        {/* Action Buttons */}
+        <div className="grid grid-cols-2 gap-3">
+          <Button
+            variant="outline"
+            onClick={() => setDetailsOpen(true)}
+            className="rounded-2xl h-full border border-primary font-bold text-gray-600 hover:bg-gray-50 transition-all flex items-center justify-center gap-2"
           >
-            {isExpired ? (
-              <>
-                Settle Position <ChevronRight size={18} />
-              </>
-            ) : (
-              <>
-                Waiting for Expiry <Clock size={18} />
-              </>
-            )}
-          </button>
-        )}
-        
-        {hedge.closed && (
-          <div className="w-full py-4 rounded-2xl bg-emerald-50 text-emerald-700 font-bold flex items-center justify-center gap-2">
-            <ShieldCheck size={18} /> Position Settled
-          </div>
-        )}
+            View Details
+          </Button>
+          {!hedge.closed ? (
+            <button
+              onClick={() => isExpired && onSettle(hedge.id)}
+              disabled={!isExpired}
+              className={`py-4 rounded-2xl font-bold transition-all flex items-center justify-center gap-2 ${
+                isExpired 
+                  ? "bg-[#d80073] text-white shadow-lg shadow-[#d80073]/20 hover:bg-[#c20067] active:scale-[0.98]" 
+                  : "bg-gray-100 text-gray-400 cursor-not-allowed"
+              }`}
+            >
+              {isExpired ? "Settle" : "Locked"}
+            </button>
+          ) : (
+            <div className="py-4 rounded-2xl bg-emerald-50 text-emerald-700 font-bold flex items-center justify-center gap-2 text-xs">
+              <ShieldCheck size={14} /> Settled
+            </div>
+          )}
+        </div>
 
         <a 
           href={`https://testnet.blockscout.injective.network/address/${HEDGE_CONTRACT_ADDRESS}`}
@@ -230,6 +232,21 @@ function HedgeCard({ hedge, onSettle }: { hedge: OnChainHedge, onSettle: (id: bi
           View on InjScan <ExternalLink size={10} />
         </a>
       </div>
+
+      <HedgeDetailsModal 
+        open={detailsOpen} 
+        onOpenChange={setDetailsOpen}
+        hedge={{
+          id: hedge.id.toString(),
+          commodity: hedge.commodity,
+          strikePrice: formatCurrency(hedge.strikePrice),
+          amount: hedge.amount.toString(),
+          expireAt: new Date(Number(hedge.expireAt) * 1000).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }),
+          status: status,
+          isFavorable: isFavorable,
+          currentPrice: formatOraclePrice(hedge.currentPrice)
+        }}
+      />
     </div>
   );
 }
