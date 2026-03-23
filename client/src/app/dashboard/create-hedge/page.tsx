@@ -26,6 +26,7 @@ import { useFaucetStatus } from "@/hooks/api/blockchain/use-faucet";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { WrongNetworkState } from "@/components/dashboard/wrong-network-state";
+import { ConnectWalletState } from "@/components/dashboard/connect-wallet-state";
 
 // ─── Expire Options ────────────────────────────────────────────────
 const EXPIRE_OPTIONS = [
@@ -429,19 +430,7 @@ function CreateHedgeForm() {
   };
 
   if (!isConnected || !address) {
-    return (
-      <div className="w-full h-[60vh] flex flex-col items-center justify-center gap-6">
-        <div className="w-20 h-20 bg-gray-50 rounded-3xl flex items-center justify-center text-4xl shadow-inner">
-          🔌
-        </div>
-        <div className="text-center space-y-2">
-          <h1 className="text-3xl font-black text-gray-900 tracking-tight">Connect Your Wallet</h1>
-          <p className="text-gray-500 font-medium max-w-sm mx-auto">
-            Please connect your wallet to verify your account status and start hedging.
-          </p>
-        </div>
-      </div>
-    );
+    return <ConnectWalletState description="Please connect your wallet to verify your account status and start hedging." />;
   }
 
   if (isWrongNetwork) {

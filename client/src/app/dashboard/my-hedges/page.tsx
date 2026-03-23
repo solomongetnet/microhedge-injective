@@ -33,6 +33,7 @@ import { COMMODITIES } from "@/lib/commodities";
 import { SettlementInfoModal } from "@/components/dashboard/settlement-info-modal";
 import { WrongNetworkState } from "@/components/dashboard/wrong-network-state";
 import { HedgeDetailsModal } from "@/components/dashboard/hedge-details-modal";
+import { ConnectWalletState } from "@/components/dashboard/connect-wallet-state";
 
 // ─── Types ────────────────────────────────────────────────────────
 interface OnChainHedge {
@@ -375,17 +376,7 @@ export default function MyHedgesPage() {
   }
 
   if (!isConnected) {
-    return (
-      <div className="w-full py-20 px-6 text-center">
-        <div className="w-20 h-20 bg-gray-50 rounded-3xl flex items-center justify-center mx-auto mb-6 text-4xl">
-          🔌
-        </div>
-        <h1 className="text-3xl font-black text-gray-900 mb-2">Connect Your Wallet</h1>
-        <p className="text-gray-500 max-w-md mx-auto">
-          Please connect your wallet to view and manage your on-chain micro-hedge positions.
-        </p>
-      </div>
-    );
+    return <ConnectWalletState description="Please connect your wallet to view and manage your on-chain micro-hedge positions." />;
   }
 
   return (

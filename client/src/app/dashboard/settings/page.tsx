@@ -45,11 +45,16 @@ import {
   CardTitle 
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ConnectWalletState } from "@/components/dashboard/connect-wallet-state";
 
 export default function SettingsPage() {
   const { address, isConnected } = useAccount();
   const { disconnect } = useDisconnect();
   const [activeTab, setActiveTab] = useState("profile");
+
+  if (!isConnected) {
+    return <ConnectWalletState description="Please connect your wallet to manage your profile and protocol preferences." />;
+  }
 
   // Mock states for interactive elements
   const [notifications, setNotifications] = useState({
