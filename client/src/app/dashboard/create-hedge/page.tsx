@@ -25,6 +25,7 @@ import { parseEther } from "viem";
 import { useFaucetStatus } from "@/hooks/api/blockchain/use-faucet";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { WrongNetworkState } from "@/components/dashboard/wrong-network-state";
 
 // ─── Expire Options ────────────────────────────────────────────────
 const EXPIRE_OPTIONS = [
@@ -88,9 +89,12 @@ interface OnChainCommodity {
 
 // ─── Form Component ───────────────────────────────────────────────
 function CreateHedgeForm() {
-  const { address, isConnected } = useAccount();
+  const { address, isConnected, chainId } = useAccount();
   const searchParams = useSearchParams();
   const router = useRouter();
+
+  const INJECTIVE_EVM_CHAIN_ID = 1439;
+  const isWrongNetwork = isConnected && chainId !== INJECTIVE_EVM_CHAIN_ID;
 
   // ── Faucet Claim Logic ──────────────────────────────────────────
   const { 
@@ -436,6 +440,22 @@ function CreateHedgeForm() {
             Please connect your wallet to verify your account status and start hedging.
           </p>
         </div>
+      </div>
+    );
+  }
+
+  if (isWrongNetwork) {
+    return (
+      <div className="w-full space-y-8 p-6">
+        <div className="flex flex-col gap-2">
+          <h1 className="text-4xl font-black text-gray-900 tracking-tight">
+            Create New Hedge
+          </h1>
+          <p className="text-gray-500 font-medium">
+            Secure your agricultural assets against market volatility with institutional-grade smart contracts.
+          </p>
+        </div>
+        <WrongNetworkState />
       </div>
     );
   }

@@ -30,6 +30,7 @@ import { HEDGE_CONTRACT_ADDRESS, PRICE_ORACLE_ADDRESS, hedgeAbi, priceOracleAbi 
 import { toast } from "sonner";
 import { COMMODITIES } from "@/lib/commodities";
 import { SettlementInfoModal } from "@/components/dashboard/settlement-info-modal";
+import { WrongNetworkState } from "@/components/dashboard/wrong-network-state";
 
 // ─── Types ────────────────────────────────────────────────────────
 interface OnChainHedge {
@@ -234,14 +235,18 @@ function HedgeCard({ hedge, onSettle }: { hedge: OnChainHedge, onSettle: (id: bi
 }
 
 export default function MyHedgesPage() {
-  const { address, isConnected } = useAccount();
+  const { address, isConnected, chainId } = useAccount();
+  const INJECTIVE_EVM_CHAIN_ID = 1439;
+  const isWrongNetwork = isConnected && chainId !== INJECTIVE_EVM_CHAIN_ID;
+
   const [hedges, setHedges] = useState<OnChainHedge[]>([]);
   const [loading, setLoading] = useState(false);
   const [isSettling, setIsSettling] = useState<bigint | null>(null);
   const [infoModalOpen, setInfoModalOpen] = useState(false);
 
   const fetchOnChainData = async () => {
-    if (!address || !window.ethereum) return;
+    if (isWrongNetwork) return;
+    if (!window.ethereum || !address) return;
     if (hedges.length === 0) setLoading(true);
     
     try {
@@ -293,17 +298,16 @@ export default function MyHedgesPage() {
   };
 
   useEffect(() => {
+    if (isWrongNetwork) {
+      setLoading(false);
+      return;
+    }
     if (isConnected && address) {
       fetchOnChainData();
-      
-      // Periodic refresh every 15 seconds for dynamic updates
-      const interval = setInterval(() => {
-        fetchOnChainData();
-      }, 15000);
-      
+      const interval = setInterval(fetchOnChainData, 30000);
       return () => clearInterval(interval);
     }
-  }, [isConnected, address]);
+  }, [isConnected, address, isWrongNetwork]);
 
   // 3. Settle Functionality
   const { writeContract: settleHedge, data: settleTxHash } = useWriteContract();
@@ -338,6 +342,20 @@ export default function MyHedgesPage() {
   // Stats
   const activeHedges = hedges.filter(h => !h.closed);
   const totalLocked = activeHedges.reduce((sum, h) => sum + h.lockedValue, BigInt(0));
+
+  if (isWrongNetwork) {
+    return (
+      <div className="w-full space-y-8 p-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div className="space-y-2">
+            <h1 className="text-4xl font-black text-gray-900 tracking-tight">My Hedges</h1>
+            <p className="text-gray-500 font-medium">Manage and settle your active on-chain protection positions.</p>
+          </div>
+        </div>
+        <WrongNetworkState />
+      </div>
+    );
+  }
 
   if (!isConnected) {
     return (

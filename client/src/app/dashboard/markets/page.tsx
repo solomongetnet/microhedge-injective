@@ -11,6 +11,8 @@ import { COMMODITIES as LOCAL_COMMODITIES } from "@/lib/commodities";
 import { toast } from "sonner";
 import Link from "next/link";
 import { MarketDetailModal } from "@/components/dashboard/market-detail-modal";
+import { useAccount } from "wagmi";
+import { WrongNetworkState } from "@/components/dashboard/wrong-network-state";
 
 // ─── Types ────────────────────────────────────────────────────────
 interface MarketCommodity {
@@ -62,6 +64,10 @@ const generateMockChart = (basePrice: number) => {
 };
 
 export default function MarketsPage() {
+  const { isConnected, chainId } = useAccount();
+  const INJECTIVE_EVM_CHAIN_ID = 1439;
+  const isWrongNetwork = isConnected && chainId !== INJECTIVE_EVM_CHAIN_ID;
+
   const [markets, setMarkets] = useState<MarketCommodity[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -69,6 +75,7 @@ export default function MarketsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchMarketData = async (isRefresh = false) => {
+    if (isWrongNetwork) return;
     if (!window.ethereum) return;
     if (isRefresh) setRefreshing(true);
     else setLoading(true);
@@ -114,10 +121,28 @@ export default function MarketsPage() {
   };
 
   useEffect(() => {
+    if (isWrongNetwork) {
+      setLoading(false);
+      return;
+    }
     fetchMarketData();
     const interval = setInterval(() => fetchMarketData(true), 30000);
     return () => clearInterval(interval);
-  }, []);
+  }, [isWrongNetwork]);
+
+  if (isWrongNetwork) {
+    return (
+      <div className="space-y-8 p-2">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-4xl font-black text-gray-900 tracking-tight">Commodity Markets</h1>
+            <p className="text-gray-500 mt-2 font-medium">Real-time prices from the on-chain Price Oracle</p>
+          </div>
+        </div>
+        <WrongNetworkState />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8 p-2">
