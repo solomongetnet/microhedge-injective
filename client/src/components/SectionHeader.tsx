@@ -18,18 +18,18 @@ export default function SectionHeader({
   subtitleWidth = "w-full max-w-[600px]",
 }: SectionHeaderProps) {
   return (
-    <div className="flex flex-col gap-[16px] w-full">
-      <span className="font-ibm-mono text-[10px] md:text-[12px] font-bold text-[#00DC82] dark:text-[#FFD600] tracking-[1.5px] md:tracking-[3px] transition-colors duration-300">
+    <div className="flex flex-col gap-4 w-full">
+      <span className="font-ibm-mono text-[10px] sm:text-[12px] font-bold text-[#00DC82] dark:text-[#FFD600] tracking-[1.5px] sm:tracking-[3px] transition-colors duration-300">
         <GlitchText text={label} speed={30} />
       </span>
       <h2
-        className={`font-grotesk text-[36px] md:text-[56px] font-bold text-black dark:text-[#F5F5F0] tracking-[-1px] leading-[1.05] whitespace-pre-line transition-colors duration-300 ${titleWidth}`}
+        className={`font-grotesk text-[clamp(24px,5vw,56px)] font-bold text-black dark:text-[#F5F5F0] tracking-[-1px] leading-[1.05] whitespace-pre-line transition-colors duration-300 ${titleWidth}`}
       >
         <GlitchText text={title} speed={40} delay={150} />
       </h2>
       {subtitle && (
         <p
-          className={`font-ibm-mono text-[10px] md:text-[13px] text-gray-700 dark:text-[#666666] tracking-[0.5px] md:tracking-[1px] leading-[1.6] text-pretty transition-colors duration-300 ${subtitleWidth}`}
+          className={`font-ibm-mono text-[clamp(10px,2.5vw,13px)] text-gray-700 dark:text-[#666666] tracking-[0.5px] sm:tracking-[1px] leading-[1.6] transition-colors duration-300 ${subtitleWidth}`}
         >
           <GlitchText text={subtitle} speed={20} delay={350} />
         </p>
