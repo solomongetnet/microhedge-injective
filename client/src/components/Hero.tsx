@@ -5,9 +5,11 @@ import GlitchText from "@/components/GlitchText";
 import CollabCursors from "@/components/CollabCursors";
 import { Button } from "@/components/ui/button";
 import { WalletLoginButton } from "@/components/WalletLoginButton";
+import { useRouter } from "next/navigation";
 
 export default function Hero() {
   const [mounted, setMounted] = useState(false);
+  const router = useRouter();
   useEffect(() => setMounted(true), []);
 
   return (
@@ -48,7 +50,9 @@ export default function Hero() {
         <WalletLoginButton redirectOnAuth className="w-full sm:w-[220px] h-[56px] font-grotesk text-[12px] font-bold tracking-[2px]">
           CONNECT WALLET
         </WalletLoginButton>
-        <Button variant="outline" size="lg" className="w-full sm:w-[200px] h-[56px] font-ibm-mono text-[12px] tracking-[2px]">
+        <Button variant="outline" onClick={() => {
+          router.push('/dashboard/markets')
+        }} size="lg" className="w-full sm:w-[200px] h-[56px] font-ibm-mono text-[12px] tracking-[2px]">
           EXPLORE MARKETS →
         </Button>
       </div>
